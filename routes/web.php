@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\SettingController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -25,5 +26,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan.index');
 
 });

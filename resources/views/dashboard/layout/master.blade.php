@@ -102,14 +102,14 @@
                                      alt="User Image">
                             @endif
                             <p>
-                                {{ Auth()->user->email ?? '-' }}
+                                {{ Auth()->user()->name ?? '-' }}
                                 <small>Universitas Metamedia. {{ date('Y') }}</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <a href="#"
+                            <a href="{{ route('pengaturan.index') }}"
                                class="btn btn-default btn-flat">Profil</a>
                             <a href="{{ route('login.logout') }}"
                                class="btn btn-default btn-flat float-right">Keluar</a>
