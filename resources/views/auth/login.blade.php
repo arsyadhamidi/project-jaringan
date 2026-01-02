@@ -24,10 +24,13 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="{{ route('login') }}"><b>Simonjar</b>Payakumbuh</a>
+            <img src="{{ asset('images/logo.png') }}" width="150" alt="">
         </div>
         <!-- /.login-logo -->
         <div class="card">
+            <div class="card-header text-center">
+                <a href="{{ route('login') }}" class="h3"><b>Simonjar</b>Payakumbuh</a>
+            </div>
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Masuk untuk memulai sesi</p>
 
