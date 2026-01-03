@@ -214,6 +214,17 @@
     <script src="{{ asset('admin/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    !-- bs-custom-file-input -->
+    <script src="{{ asset('admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+    <script>
+        $(function() {
+            bsCustomFileInput.init();
+        });
+    </script>
+    @stack('custom-script')
 </body>
 
 </html>

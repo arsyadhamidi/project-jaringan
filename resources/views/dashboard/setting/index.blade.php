@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header">
                     Biodata
                 </div>
                 <div class="card-body">
@@ -36,7 +36,7 @@
                                 <h4>{{ Auth()->user()->name ?? '-' }}</h4>
                             </div>
                             <div class="mb-3">
-                                <span class="text-muted">{{ $users->namalevel ?? '-' }}</span>
+                                <span class="text-muted">{{ $users->nm_level ?? '-' }}</span>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,11 @@
                             <hr>
                             <div class="mb-3">
                                 <label><strong>Status</strong></label>
-                                <p><i>{{ $users->namalevel ?? '-' }}</i></p>
+                                <p><i>{{ $users->nm_level ?? '-' }}</i></p>
+                            </div>
+                            <div class="mb-3">
+                                <label><strong>Instansi</strong></label>
+                                <p><i>{{ $users->nm_instansi ?? '-' }}</i></p>
                             </div>
                             <hr>
                         </div>
@@ -64,173 +68,46 @@
         </div>
         <div class="col-lg">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Profile
+                <div class="card-header">
+                    <ul class="nav nav-pills ml-auto p-2">
+                        <li class="nav-item"><a class="nav-link active"
+                               href="#tab_1"
+                               data-toggle="tab">Perbaharui Profil</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                               href="#tab_2"
+                               data-toggle="tab">Perbaharui Email</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                               href="#tab_3"
+                               data-toggle="tab">Perbaharui Kata Sandi</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                               href="#tab_4"
+                               data-toggle="tab">Perbaharui Gambar</a></li>
+                    </ul>
                 </div>
                 <div class="card-body">
-                    <nav>
-                        <div class="nav nav-tabs"
-                             id="nav-tab"
-                             role="tablist"
-                             style="border-bottom: none">
-                            <button class="nav-link active"
-                                    id="nav-home-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#profile"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="profile"
-                                    aria-selected="true"
-                                    style="border: 1px solid gainsboro">Profile</button>
-                            <button class="nav-link mx-3"
-                                    id="nav-profile-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#password"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="password"
-                                    aria-selected="false"
-                                    style="border: 1px solid gainsboro">
-                                Password
-                            </button>
-                            <button class="nav-link"
-                                    id="nav-profile-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#gambar"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="gambar"
-                                    aria-selected="false"
-                                    style="border: 1px solid gainsboro">
-                                Ganti Gambar
-                            </button>
+                    <div class="tab-content">
+                        <div class="tab-pane active"
+                             id="tab_1">
+                            @include('dashboard.setting.profil')
                         </div>
-                    </nav>
-                    <div class="tab-content mt-4"
-                         id="nav-tabContent">
-                        <div class="tab-pane fade show active"
-                             id="profile"
-                             role="tabpanel"
-                             aria-labelledby="nav-home-tab">
-                            <form action="#"
-                                  method="POST">
-                                @csrf
-                                <div class="row mb-4">
-                                    <div class="col-lg">
-                                        <div class="mb-3">
-                                            <label>Nama Lengkap</label>
-                                            <input type="text"
-                                                   name="name"
-                                                   class="form-control @error('name') is-invalid @enderror"
-                                                   value="{{ old('name', Auth()->user()->name ?? '-') }}"
-                                                   placeholder="Masukan nama lengkap">
-                                            @error('name')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <button type="submit"
-                                            class="btn btn-success">
-                                        <i class="fas fa-save"></i>
-                                        Simpan Data
-                                    </button>
-                                </div>
-                            </form>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane"
+                             id="tab_2">
+                            @include('dashboard.setting.email')
                         </div>
-                        <div class="tab-pane fade"
-                             id="password"
-                             role="tabpanel"
-                             aria-labelledby="nav-profile-tab">
-                            <form action="#"
-                                  method="POST">
-                                @csrf
-                                <div class="row mb-4">
-                                    <div class="col-lg">
-                                        <div class="mb-3">
-                                            <label>Password</label>
-                                            <input type="password"
-                                                   name="password"
-                                                   class="form-control @error('password') is-invalid @enderror"
-                                                   placeholder="Masukan password">
-                                            @error('password')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Konfirmasi Password</label>
-                                            <input type="password"
-                                                   name="konfirmasipassword"
-                                                   class="form-control @error('konfirmasipassword') is-invalid @enderror"
-                                                   value="{{ old('konfirmasipassword') }}"
-                                                   placeholder="Masukan konfirmasi password">
-                                            @error('konfirmasipassword')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane"
+                             id="tab_3">
+                            @include('dashboard.setting.password')
+                        </div>
+                        <!-- /.tab-pane -->
 
-                                        <div class="mb-3">
-                                            <button type="submit"
-                                                    class="btn btn-success">
-                                                <i class="fas fa-save"></i>
-                                                Simpan Data
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane"
+                             id="tab_4">
+                            @include('dashboard.setting.foto')
                         </div>
-                        <div class="tab-pane fade"
-                             id="gambar"
-                             role="tabpanel"
-                             aria-labelledby="nav-profile-tab">
-                            <form action="#"
-                                  method="POST"
-                                  enctype="multipart/form-data">
-                                @csrf
-                                <div class="row mb-4">
-                                    <div class="col-lg">
-                                        <div class="mb-3">
-                                            <label>Upload Gambar</label>
-                                            <input type="file"
-                                                   name="foto_profile"
-                                                   class="file-upload-default"
-                                                   hidden>
-                                            <div class="input-group col-xs-12">
-                                                <input type="text"
-                                                       class="form-control file-upload-info @error('foto_profile') is-invalid @enderror"
-                                                       disabled
-                                                       placeholder="Upload Image">
-                                                <span class="input-group-append">
-                                                    <button class="file-upload-browse btn btn-success"
-                                                            type="button">Upload</button>
-                                                </span>
-                                                @error('foto_profile')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <button type="submit"
-                                                    class="btn btn-success">
-                                                <i class="fas fa-save"></i>
-                                                Simpan Data
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                        <!-- /.tab-pane -->
                     </div>
                 </div>
             </div>
@@ -244,13 +121,13 @@
                                     Apakah Anda yakin ingin menghapus gambar foto profil Anda? Tindakan ini tidak dapat
                                     dibatalkan dan akan menghapus gambar yang saat ini ditetapkan sebagai foto profil Anda.
                                 </p>
-                                <form action="#"
+                                <form action="{{ route('pengaturan.hapusgambar') }}"
                                       method="POST"
                                       enctype="multipart/form-data"
                                       id="dataForm">
                                     @csrf
                                     <button type="submit"
-                                            class="btn btn-danger">
+                                            class="btn btn-danger" onclick="return confirm('Apakah anda yakin untuk menghapus data ini ?')">
                                         <i class="fas fa-times"></i>
                                         Hapus Gambar
                                     </button>
