@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminLevelController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Middleware\CekLevel;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 /*
@@ -33,4 +37,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pengaturan/updategambar', [SettingController::class, 'updategambar'])->name('pengaturan.updategambar');
     Route::post('/pengaturan/hapusgambar', [SettingController::class, 'hapusgambar'])->name('pengaturan.hapusgambar');
 
+
+    // Admin
+    Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Level
+        Route::get('/admin-level/index', [AdminLevelController::class, 'index'])->name('admin-level.index');
+        Route::get('/admin-level/create', [AdminLevelController::class, 'create'])->name('admin-level.create');
+        Route::get('/admin-level/edit/{id}', [AdminLevelController::class, 'edit'])->name('admin-level.edit');
+        Route::post('/admin-level/store', [AdminLevelController::class, 'store'])->name('admin-level.store');
+        Route::post('/admin-level/update/{id}', [AdminLevelController::class, 'update'])->name('admin-level.update');
+        Route::post('/admin-level/destroy/{id}', [AdminLevelController::class, 'destroy'])->name('admin-level.destroy');
+    });
 });
