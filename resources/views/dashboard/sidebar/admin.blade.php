@@ -18,7 +18,7 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="#"
+            <a href="{{ route('admin-users.index') }}"
                class="nav-link @yield('menuDataUserRegistrasi')">
                 <i class="far fa-circle nav-icon"></i>
                 <p>User Registrasi</p>

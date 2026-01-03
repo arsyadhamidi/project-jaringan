@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminInstansiController;
 use App\Http\Controllers\Admin\AdminLevelController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\SettingController;
@@ -41,6 +42,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Users
+        Route::get('/admin-users/index', [AdminUserController::class, 'index'])->name('admin-users.index');
+        Route::get('/admin-users/create', [AdminUserController::class, 'create'])->name('admin-users.create');
+        Route::get('/admin-users/edit/{id}', [AdminUserController::class, 'edit'])->name('admin-users.edit');
+        Route::post('/admin-users/store', [AdminUserController::class, 'store'])->name('admin-users.store');
+        Route::post('/admin-users/update/{id}', [AdminUserController::class, 'update'])->name('admin-users.update');
+        Route::post('/admin-users/destroy/{id}', [AdminUserController::class, 'destroy'])->name('admin-users.destroy');
 
         // Instansi
         Route::get('/admin-instansi/index', [AdminInstansiController::class, 'index'])->name('admin-instansi.index');
