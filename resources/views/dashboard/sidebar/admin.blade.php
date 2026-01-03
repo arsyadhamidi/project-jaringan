@@ -8,6 +8,15 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin-status.index') }}"
+       class="nav-link @yield('menuDataStatusLaporan')">
+        <i class="nav-icon fas fa-clipboard-check"></i>
+        <p>
+            Status Laporan
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="#"
        class="nav-link @yield('menuDataAutentikasi')">
         <i class="fas fa-users nav-icon"></i>

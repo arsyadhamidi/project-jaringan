@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminInstansiController;
 use App\Http\Controllers\Admin\AdminLevelController;
+use App\Http\Controllers\Admin\AdminStatusLaporanController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -42,6 +43,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Status Laporan
+        Route::get('/admin-status/index', [AdminStatusLaporanController::class, 'index'])->name('admin-status.index');
+        Route::get('/admin-status/create', [AdminStatusLaporanController::class, 'create'])->name('admin-status.create');
+        Route::get('/admin-status/edit/{id}', [AdminStatusLaporanController::class, 'edit'])->name('admin-status.edit');
+        Route::post('/admin-status/store', [AdminStatusLaporanController::class, 'store'])->name('admin-status.store');
+        Route::post('/admin-status/update/{id}', [AdminStatusLaporanController::class, 'update'])->name('admin-status.update');
+        Route::post('/admin-status/destroy/{id}', [AdminStatusLaporanController::class, 'destroy'])->name('admin-status.destroy');
 
         // Users
         Route::get('/admin-users/index', [AdminUserController::class, 'index'])->name('admin-users.index');
