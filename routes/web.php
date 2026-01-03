@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminInstansiController;
 use App\Http\Controllers\Admin\AdminLevelController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -40,6 +41,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Instansi
+        Route::get('/admin-instansi/index', [AdminInstansiController::class, 'index'])->name('admin-instansi.index');
+        Route::get('/admin-instansi/create', [AdminInstansiController::class, 'create'])->name('admin-instansi.create');
+        Route::get('/admin-instansi/edit/{id}', [AdminInstansiController::class, 'edit'])->name('admin-instansi.edit');
+        Route::post('/admin-instansi/store', [AdminInstansiController::class, 'store'])->name('admin-instansi.store');
+        Route::post('/admin-instansi/update/{id}', [AdminInstansiController::class, 'update'])->name('admin-instansi.update');
+        Route::post('/admin-instansi/destroy/{id}', [AdminInstansiController::class, 'destroy'])->name('admin-instansi.destroy');
 
         // Level
         Route::get('/admin-level/index', [AdminLevelController::class, 'index'])->name('admin-level.index');

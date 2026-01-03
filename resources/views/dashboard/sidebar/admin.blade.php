@@ -1,4 +1,13 @@
 <li class="nav-item">
+    <a href="{{ route('admin-instansi.index') }}"
+       class="nav-link @yield('menuDataInstansi')">
+        <i class="nav-icon fas fa-building"></i>
+        <p>
+            Data Instansi
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="#"
        class="nav-link @yield('menuDataAutentikasi')">
         <i class="fas fa-users nav-icon"></i>
