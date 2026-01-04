@@ -30,7 +30,7 @@
                                 <tr>
                                     <th style="width: 4%">No.</th>
                                     <th>Instansi</th>
-                                    <th>Jenis</th>
+                                    <th>Tipe</th>
                                     <th>Provider</th>
                                     <th>Ip.Address</th>
                                     <th>Bandwidth</th>
@@ -92,8 +92,8 @@
                         defaultContent: "-",
                     },
                     {
-                        data: "jns_jaringan",
-                        name: "jns_jaringan",
+                        data: "tipe_jaringan",
+                        name: "tipe_jaringan",
                         defaultContent: "-",
                     },
                     {
@@ -116,10 +116,10 @@
                         name: "status",
                         defaultContent: "-",
                         render: function(data, row, type){
-                            if(data == 'Normal'){
-                                return '<span class="badge bg-success">Normal</span>';
+                            if(data == 'Online'){
+                                return '<span class="badge bg-success">Online</span>';
                             }else{
-                                return '<span class="badge bg-danger">Bermasalah</span>';
+                                return '<span class="badge bg-danger">Offline</span>';
                             }
                         }
                     },

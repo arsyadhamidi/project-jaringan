@@ -26,6 +26,15 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin-jaringan.index') }}"
+       class="nav-link @yield('menuDataLaporanGangguan')">
+        <i class="nav-icon fas fa-exclamation-triangle"></i>
+        <p>
+            Laporan Gangguan
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="#"
        class="nav-link @yield('menuDataAutentikasi')">
         <i class="fas fa-users nav-icon"></i>

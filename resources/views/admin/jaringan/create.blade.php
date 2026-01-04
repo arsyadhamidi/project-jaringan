@@ -48,13 +48,13 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label><b>Jenis Jaringan</b></label>
+                                        <label><b>Tipe Jaringan</b></label>
                                         <input type="text"
-                                               name="jns_jaringan"
-                                               class="form-control @error('jns_jaringan') is-invalid @enderror"
-                                               value="{{ old('jns_jaringan') }}"
+                                               name="tipe_jaringan"
+                                               class="form-control @error('tipe_jaringan') is-invalid @enderror"
+                                               value="{{ old('tipe_jaringan') }}"
                                                placeholder="Cth: Fo, Wireless, VPN, dll">
-                                        @error('jns_jaringan')
+                                        @error('tipe_jaringan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -115,10 +115,10 @@
                                                 style="width: 100%">
                                             <option value=""
                                                     selected>Pilih Status</option>
-                                            <option value="Normal"
-                                                    {{ old('status') == 'Normal' ? 'selected' : '' }}>Normal</option>
-                                            <option value="Bermasalah"
-                                                    {{ old('status') == 'Bermasalah' ? 'selected' : '' }}>Bermasalah</option>
+                                            <option value="Online"
+                                                    {{ old('status') == 'Online' ? 'selected' : '' }}>Online</option>
+                                            <option value="Offline"
+                                                    {{ old('status') == 'Offline' ? 'selected' : '' }}>Offline</option>
                                         </select>
                                         @error('status')
                                             <div class="invalid-feedback">

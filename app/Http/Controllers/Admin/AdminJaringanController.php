@@ -19,7 +19,7 @@ class AdminJaringanController extends Controller
                 ->select([
                     'jaringans.id',
                     'jaringans.instansi_id',
-                    'jaringans.jns_jaringan',
+                    'jaringans.tipe_jaringan',
                     'jaringans.provider',
                     'jaringans.ip_address',
                     'jaringans.bandwidth',
@@ -36,7 +36,7 @@ class AdminJaringanController extends Controller
                         ->orWhere('jaringans.ip_address', 'LIKE', "%{$search}%")
                         ->orWhere('jaringans.bandwidth', 'LIKE', "%{$search}%")
                         ->orWhere('jaringans.status', 'LIKE', "%{$search}%")
-                        ->orWhere('jaringans.jns_jaringan', 'LIKE', "%{$search}%");
+                        ->orWhere('jaringans.tipe_jaringan', 'LIKE', "%{$search}%");
                 });
             }
 
@@ -88,7 +88,7 @@ class AdminJaringanController extends Controller
         $request->validate(
             [
                 'instansi_id'  => 'required',
-                'jns_jaringan' => 'required|max:100',
+                'tipe_jaringan' => 'required|max:100',
                 'provider'     => 'required|max:100',
                 'ip_address'   => 'required|max:100',
                 'bandwidth'    => 'required|max:100',
@@ -98,8 +98,8 @@ class AdminJaringanController extends Controller
             [
                 'instansi_id.required'  => 'Instansi wajib dipilih.',
 
-                'jns_jaringan.required' => 'Jenis jaringan wajib diisi.',
-                'jns_jaringan.max'      => 'Jenis jaringan maksimal 100 karakter.',
+                'tipe_jaringan.required' => 'Tipe jaringan wajib diisi.',
+                'tipe_jaringan.max'      => 'Tipe jaringan maksimal 100 karakter.',
 
                 'provider.required'     => 'Provider jaringan wajib diisi.',
                 'provider.max'          => 'Provider jaringan maksimal 100 karakter.',
@@ -120,7 +120,7 @@ class AdminJaringanController extends Controller
 
         Jaringan::create([
             'instansi_id' => $request->instansi_id,
-            'jns_jaringan' => $request->jns_jaringan,
+            'tipe_jaringan' => $request->tipe_jaringan,
             'provider' => $request->provider,
             'ip_address' => $request->ip_address,
             'bandwidth' => $request->bandwidth,
@@ -146,7 +146,7 @@ class AdminJaringanController extends Controller
          $request->validate(
             [
                 'instansi_id'  => 'required',
-                'jns_jaringan' => 'required|max:100',
+                'tipe_jaringan' => 'required|max:100',
                 'provider'     => 'required|max:100',
                 'ip_address'   => 'required|max:100',
                 'bandwidth'    => 'required|max:100',
@@ -156,8 +156,8 @@ class AdminJaringanController extends Controller
             [
                 'instansi_id.required'  => 'Instansi wajib dipilih.',
 
-                'jns_jaringan.required' => 'Jenis jaringan wajib diisi.',
-                'jns_jaringan.max'      => 'Jenis jaringan maksimal 100 karakter.',
+                'tipe_jaringan.required' => 'Tipe jaringan wajib diisi.',
+                'tipe_jaringan.max'      => 'Tipe jaringan maksimal 100 karakter.',
 
                 'provider.required'     => 'Provider jaringan wajib diisi.',
                 'provider.max'          => 'Provider jaringan maksimal 100 karakter.',
@@ -178,7 +178,7 @@ class AdminJaringanController extends Controller
 
         Jaringan::where('id', $id)->update([
             'instansi_id' => $request->instansi_id,
-            'jns_jaringan' => $request->jns_jaringan,
+            'tipe_jaringan' => $request->tipe_jaringan,
             'provider' => $request->provider,
             'ip_address' => $request->ip_address,
             'bandwidth' => $request->bandwidth,

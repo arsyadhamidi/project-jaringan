@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('jaringans', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->integer('instansi_id');
-            $table->string('jns_jaringan', 100);
+            $table->string('tipe_jaringan', 100);
             $table->string('provider', 100);
             $table->string('ip_address', 100);
             $table->string('bandwidth', 100);
-            $table->enum('status', ['Normal', 'Bermasalah']);
+            $table->enum('status', ['Online', 'Offline']);
             $table->string('keterangan', 100);
             $table->timestamps();
         });
