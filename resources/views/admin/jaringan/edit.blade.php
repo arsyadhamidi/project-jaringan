@@ -63,12 +63,12 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label><b>Provider</b></label>
+                                        <label><b>Mac Address</b></label>
                                         <input type="text"
                                                name="provider"
                                                class="form-control @error('provider') is-invalid @enderror"
                                                value="{{ old('provider', $jaringans->provider ?? '-') }}"
-                                               placeholder="Masukan provider">
+                                               placeholder="Masukan Mac Address">
                                         @error('provider')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

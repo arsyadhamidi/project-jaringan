@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laporan_gangguans', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->autoIncrement();
+            $table->integer('instansi_id');
+            $table->integer('jaringan_id');
+            $table->integer('users_id');
+            $table->integer('status_id');
+            $table->string('judul', 100);
+            $table->text('deskripsi');
+            $table->timestamp('waktu_kejadian');
+            $table->enum('prioritas', ['Rendah', 'Sedang', 'Tinggi']);
             $table->timestamps();
         });
     }

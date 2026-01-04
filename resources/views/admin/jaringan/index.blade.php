@@ -31,7 +31,7 @@
                                     <th style="width: 4%">No.</th>
                                     <th>Instansi</th>
                                     <th>Tipe</th>
-                                    <th>Provider</th>
+                                    <th>Mac.Address</th>
                                     <th>Ip.Address</th>
                                     <th>Bandwidth</th>
                                     <th>Status</th>

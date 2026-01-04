@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminInstansiController;
 use App\Http\Controllers\Admin\AdminJaringanController;
+use App\Http\Controllers\Admin\AdminLaporanGangguanController;
 use App\Http\Controllers\Admin\AdminLevelController;
 use App\Http\Controllers\Admin\AdminStatusLaporanController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -44,6 +45,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Laporan Gangguan
+        Route::get('/admin-laporangangguan/index', [AdminLaporanGangguanController::class, 'index'])->name('admin-laporangangguan.index');
+        Route::get('/admin-laporangangguan/create', [AdminLaporanGangguanController::class, 'create'])->name('admin-laporangangguan.create');
+        Route::get('/admin-laporangangguan/edit/{id}', [AdminLaporanGangguanController::class, 'edit'])->name('admin-laporangangguan.edit');
+        Route::post('/admin-laporangangguan/store', [AdminLaporanGangguanController::class, 'store'])->name('admin-laporangangguan.store');
+        Route::post('/admin-laporangangguan/update/{id}', [AdminLaporanGangguanController::class, 'update'])->name('admin-laporangangguan.update');
+        Route::post('/admin-laporangangguan/destroy/{id}', [AdminLaporanGangguanController::class, 'destroy'])->name('admin-laporangangguan.destroy');
 
         // Jaringan
         Route::get('/admin-jaringan/index', [AdminJaringanController::class, 'index'])->name('admin-jaringan.index');
