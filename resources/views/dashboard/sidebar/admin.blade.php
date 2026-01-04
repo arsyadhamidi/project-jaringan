@@ -17,6 +17,15 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin-jaringan.index') }}"
+       class="nav-link @yield('menuDataJaringan')">
+        <i class="nav-icon fas fa-network-wired"></i>
+        <p>
+            Jaringan
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="#"
        class="nav-link @yield('menuDataAutentikasi')">
         <i class="fas fa-users nav-icon"></i>

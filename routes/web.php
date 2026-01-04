@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminInstansiController;
+use App\Http\Controllers\Admin\AdminJaringanController;
 use App\Http\Controllers\Admin\AdminLevelController;
 use App\Http\Controllers\Admin\AdminStatusLaporanController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -43,6 +44,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Jaringan
+        Route::get('/admin-jaringan/index', [AdminJaringanController::class, 'index'])->name('admin-jaringan.index');
+        Route::get('/admin-jaringan/create', [AdminJaringanController::class, 'create'])->name('admin-jaringan.create');
+        Route::get('/admin-jaringan/edit/{id}', [AdminJaringanController::class, 'edit'])->name('admin-jaringan.edit');
+        Route::post('/admin-jaringan/store', [AdminJaringanController::class, 'store'])->name('admin-jaringan.store');
+        Route::post('/admin-jaringan/update/{id}', [AdminJaringanController::class, 'update'])->name('admin-jaringan.update');
+        Route::post('/admin-jaringan/destroy/{id}', [AdminJaringanController::class, 'destroy'])->name('admin-jaringan.destroy');
 
         // Status Laporan
         Route::get('/admin-status/index', [AdminStatusLaporanController::class, 'index'])->name('admin-status.index');
