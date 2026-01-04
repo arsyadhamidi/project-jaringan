@@ -116,7 +116,6 @@ class AdminLaporanGangguanController extends Controller
                 'status_id'       => 'required',
                 'judul'           => 'required|max:100',
                 'deskripsi'       => 'required',
-                'waktu_kejadian'  => 'required',
                 'prioritas'       => 'required',
             ],
             [
@@ -128,8 +127,6 @@ class AdminLaporanGangguanController extends Controller
                 'judul.max'               => 'Judul laporan maksimal 100 karakter.',
 
                 'deskripsi.required'      => 'Deskripsi gangguan wajib diisi.',
-
-                'waktu_kejadian.required' => 'Waktu kejadian wajib diisi.',
 
                 'prioritas.required'      => 'Prioritas laporan wajib dipilih.',
             ]
@@ -191,7 +188,6 @@ class AdminLaporanGangguanController extends Controller
                 'status_id'       => 'required',
                 'judul'           => 'required|max:100',
                 'deskripsi'       => 'required',
-                'waktu_kejadian'  => 'required',
                 'prioritas'       => 'required',
             ],
             [
@@ -203,8 +199,6 @@ class AdminLaporanGangguanController extends Controller
                 'judul.max'               => 'Judul laporan maksimal 100 karakter.',
 
                 'deskripsi.required'      => 'Deskripsi gangguan wajib diisi.',
-
-                'waktu_kejadian.required' => 'Waktu kejadian wajib diisi.',
 
                 'prioritas.required'      => 'Prioritas laporan wajib dipilih.',
             ]

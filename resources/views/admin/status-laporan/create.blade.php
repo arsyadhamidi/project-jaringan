@@ -41,7 +41,7 @@
                                             <option value="Selesai"
                                                     {{ old('nm_status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                                             <option value="Ditolak"
-                                                    {{ old('nm_status') == 'Ditolak' ? 'selected' : '' }}>Selesai</option>
+                                                    {{ old('nm_status') == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                         </select>
                                         @error('nm_status')
                                             <div class="invalid-feedback">

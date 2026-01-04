@@ -26,7 +26,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="{{ route('admin-jaringan.index') }}"
+    <a href="{{ route('admin-laporangangguan.index') }}"
        class="nav-link @yield('menuDataLaporanGangguan')">
         <i class="nav-icon fas fa-exclamation-triangle"></i>
         <p>
