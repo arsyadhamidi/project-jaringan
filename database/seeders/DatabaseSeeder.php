@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Instansi;
 use App\Models\Level;
+use App\Models\StatusLaporan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -28,6 +29,25 @@ class DatabaseSeeder extends Seeder
             'id_level' => '1',
             'nm_level' => 'Super Admin',
             'keterangan' => '-',
+        ]);
+
+        StatusLaporan::insert([
+            [
+                'nm_status' => 'Baru',
+                'warna' => '1',
+            ],
+            [
+                'nm_status' => 'Diproses',
+                'warna' => '2',
+            ],
+            [
+                'nm_status' => 'Selesai',
+                'warna' => '3',
+            ],
+            [
+                'nm_status' => 'Ditolak',
+                'warna' => '0',
+            ],
         ]);
 
         User::create([
