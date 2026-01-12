@@ -24,6 +24,8 @@
     <link rel="stylesheet"
           href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet"
+          href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet"
           href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet"
           href="{{ asset('plugins/datepicker/bootstrap-datepicker.min.css') }}">
@@ -235,6 +237,8 @@
     <script src="{{ asset('admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <!-- Select2 -->
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>

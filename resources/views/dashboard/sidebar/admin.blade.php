@@ -35,6 +35,15 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin-tindaklanjut.index') }}"
+       class="nav-link @yield('menuDataTindakLanjut')">
+        <i class="nav-icon fas fa-tasks"></i>
+        <p>
+            Tindak Lanjut
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="#"
        class="nav-link @yield('menuDataAutentikasi')">
         <i class="fas fa-users nav-icon"></i>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminJaringanController;
 use App\Http\Controllers\Admin\AdminLaporanGangguanController;
 use App\Http\Controllers\Admin\AdminLevelController;
 use App\Http\Controllers\Admin\AdminStatusLaporanController;
+use App\Http\Controllers\Admin\AdminTindakLanjutController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -45,6 +46,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin
     Route::group(['middleware' => [CekLevel::class . ':1']], function () {
+
+        // Tindak Lanjut
+        Route::get('/admin-tindaklanjut/index', [AdminTindakLanjutController::class, 'index'])->name('admin-tindaklanjut.index');
+        Route::get('/admin-tindaklanjut/tindaklanjut/{id}', [AdminTindakLanjutController::class, 'tindaklanjut'])->name('admin-tindaklanjut.tindaklanjut');
 
         // Laporan Gangguan
         Route::get('/admin-laporangangguan/index', [AdminLaporanGangguanController::class, 'index'])->name('admin-laporangangguan.index');
