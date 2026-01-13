@@ -30,7 +30,7 @@
                                 <tr>
                                     <th style="width: 4%">No.</th>
                                     <th>Nama</th>
-                                    <th>Warna</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
