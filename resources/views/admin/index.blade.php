@@ -4,7 +4,7 @@
     </div>
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Beranda</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Beranda</a></li>
             <li class="breadcrumb-item active">Main Page</li>
         </ol>
     </div>
@@ -16,14 +16,14 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
+                <h3>{{ $countInstansis ?? '0' }}</h3>
 
-                <p>New Orders</p>
+                <p>Data Instansi</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
-            <a href="#"
+            <a href="{{ route('admin-instansi.index') }}"
                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
@@ -32,14 +32,14 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{ $countJaringans ?? '0' }}</h3>
 
-                <p>Bounce Rate</p>
+                <p>Data Jaringan</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#"
+            <a href="{{ route('admin-jaringan.index') }}"
                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
@@ -48,14 +48,14 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
+                <h3>{{ $countLaporans ?? '0' }}</h3>
 
-                <p>User Registrations</p>
+                <p>Data Laporan Gangguan</p>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
             </div>
-            <a href="#"
+            <a href="{{ route('admin-laporangangguan.index') }}"
                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
@@ -64,16 +64,105 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $countTindakans ?? '0' }}</h3>
 
-                <p>Unique Visitors</p>
+                <p>Data Tindakan Lanjut</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="#"
+            <a href="{{ route('admin-tindaklanjut.index') }}"
                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
 </div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Grafik Laporan Gangguan & Tindak Lanjut
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="laporanChart"
+                        height="500"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@php
+    $bulan = [
+        1 => 'Jan',
+        2 => 'Feb',
+        3 => 'Mar',
+        4 => 'Apr',
+        5 => 'Mei',
+        6 => 'Jun',
+        7 => 'Jul',
+        8 => 'Agu',
+        9 => 'Sep',
+        10 => 'Okt',
+        11 => 'Nov',
+        12 => 'Des',
+    ];
+
+    $dataLaporan = [];
+    $dataTindakan = [];
+
+    foreach ($bulan as $key => $value) {
+        $dataLaporan[] = $laporanPerBulan[$key] ?? 0;
+        $dataTindakan[] = $tindakanPerBulan[$key] ?? 0;
+    }
+@endphp
+
+
+@push('custom-script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('laporanChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode(array_values($bulan)) !!},
+                    datasets: [{
+                            label: 'Laporan Gangguan',
+                            data: {!! json_encode($dataLaporan) !!},
+                            backgroundColor: 'rgba(255, 193, 7, 0.8)'
+                        },
+                        {
+                            label: 'Tindak Lanjut',
+                            data: {!! json_encode($dataTindakan) !!},
+                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+@endpush
