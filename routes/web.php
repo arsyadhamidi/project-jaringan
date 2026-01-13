@@ -50,6 +50,9 @@ Route::middleware(['auth'])->group(function () {
         // Tindak Lanjut
         Route::get('/admin-tindaklanjut/index', [AdminTindakLanjutController::class, 'index'])->name('admin-tindaklanjut.index');
         Route::get('/admin-tindaklanjut/tindaklanjut/{id}', [AdminTindakLanjutController::class, 'tindaklanjut'])->name('admin-tindaklanjut.tindaklanjut');
+        Route::post('/admin-tindaklanjut/storetindakan', [AdminTindakLanjutController::class, 'storetindakan'])->name('admin-tindaklanjut.storetindakan');
+        Route::post('/admin-tindaklanjut/updatetindakan/{id}', [AdminTindakLanjutController::class, 'updatetindakan'])->name('admin-tindaklanjut.updatetindakan');
+        Route::post('/admin-tindaklanjut/destroytindakan/{id}', [AdminTindakLanjutController::class, 'destroytindakan'])->name('admin-tindaklanjut.destroytindakan');
 
         // Laporan Gangguan
         Route::get('/admin-laporangangguan/index', [AdminLaporanGangguanController::class, 'index'])->name('admin-laporangangguan.index');

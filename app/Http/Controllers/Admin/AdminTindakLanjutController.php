@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LaporanGangguan;
 use App\Models\StatusLaporan;
+use App\Models\TindakLanjut;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminTindakLanjutController extends Controller
 {
@@ -116,8 +120,100 @@ class AdminTindakLanjutController extends Controller
             ->orderBy('laporan_gangguans.id', 'desc')
             ->first();
 
+        $users = User::orderBy('id', 'desc')->get();
+        $status = StatusLaporan::orderBy('id', 'desc')->get();
+        $tindakans = TindakLanjut::join('laporan_gangguans', 'tindak_lanjuts.laporan_id', 'laporan_gangguans.id')
+            ->join('status_laporans', 'tindak_lanjuts.status_id', 'status_laporans.id')
+            ->join('users', 'tindak_lanjuts.users_id', 'users.id')
+            ->select([
+                'tindak_lanjuts.id',
+                'tindak_lanjuts.laporan_id',
+                'tindak_lanjuts.users_id',
+                'tindak_lanjuts.status_id',
+                'tindak_lanjuts.keterangan',
+                'tindak_lanjuts.created_at',
+                'tindak_lanjuts.updated_at',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+            ])->where('tindak_lanjuts.laporan_id', $id)
+            ->orderBy('tindak_lanjuts.id', 'desc')
+            ->get();
+
         return view('admin.tindak-lanjut.tindak-lanjut', [
             'laporans' => $laporans,
+            'users' => $users,
+            'status' => $status,
+            'tindakans' => $tindakans,
         ]);
+    }
+
+    public function storetindakan(Request $request)
+    {
+        $request->validate(
+            [
+                'users_id'   => 'required',
+                'status_id'  => 'required',
+                'keterangan' => 'required',
+            ],
+            [
+                'users_id.required'   => 'Pengguna wajib dipilih.',
+                'status_id.required'  => 'Status wajib dipilih.',
+                'keterangan.required' => 'Keterangan tidak boleh kosong.',
+            ]
+        );
+
+        LaporanGangguan::where('id', $request->laporan_id)->update([
+            'status_id' => $request->status_id,
+        ]);
+
+        TindakLanjut::create([
+            'laporan_id' => $request->laporan_id,
+            'users_id' => $request->users_id,
+            'status_id' => $request->status_id,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        return back()->with('success', 'Selamat ! Anda berhasil memberikan laporan tindak lanjut');
+    }
+
+    public function updatetindakan(Request $request, $id)
+    {
+        $request->validate(
+            [
+                'users_id'   => 'required',
+                'status_id'  => 'required',
+                'keterangan' => 'required',
+            ],
+            [
+                'users_id.required'   => 'Pengguna wajib dipilih.',
+                'status_id.required'  => 'Status wajib dipilih.',
+                'keterangan.required' => 'Keterangan tidak boleh kosong.',
+            ]
+        );
+
+        $tindaks = TindakLanjut::where('id', $id)->orderBy('id', 'desc')->first();
+
+        LaporanGangguan::where('id', $tindaks->laporan_id)->update([
+            'status_id' => $request->status_id,
+        ]);
+
+        $tindaks->update([
+            'users_id' => $request->users_id,
+            'status_id' => $request->status_id,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        return back()->with('success', 'Selamat ! Anda berhasil memperbaharui laporan tindak lanjut');
+    }
+
+    public function destroytindakan($id)
+    {
+
+        $tindaks = TindakLanjut::where('id', $id)->orderBy('id', 'desc')->first();
+
+        $tindaks->delete();
+
+        return back()->with('success', 'Selamat ! Anda berhasil menghapus laporan tindak lanjut');
     }
 }
