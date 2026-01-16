@@ -36,6 +36,7 @@
                                     <th>Deskripsi</th>
                                     <th>Prioritas</th>
                                     <th>Waktu</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -120,6 +121,24 @@
                         data: "waktu_kejadian",
                         name: "waktu_kejadian",
                         defaultContent: "-",
+                    },
+                    {
+                        data: "warna",
+                        name: "warna",
+                        defaultContent: "-",
+                        render: function(data, type, row) {
+                            var namaStatus = row.nm_status;
+                            if (data == '1') {
+                                return '<span class="badge badge-primary">' + namaStatus + '</span>';
+                            }else if(data == '2'){
+                                return '<span class="badge badge-warning">' + namaStatus + '</span>';
+                            }else if(data == '3'){
+                                return '<span class="badge badge-success">' + namaStatus + '</span>';
+                            }else if(data == '0'){
+                                return '<span class="badge badge-danger">' + namaStatus + '</span>';
+                            }
+                            return data ?? '-';
+                        }
                     },
                     {
                         data: "aksi",
