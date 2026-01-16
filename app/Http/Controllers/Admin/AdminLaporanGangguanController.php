@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\LaporanGangguanExport;
 use App\Http\Controllers\Controller;
 use App\Models\Jaringan;
 use App\Models\LaporanGangguan;
@@ -9,6 +10,7 @@ use App\Models\StatusLaporan;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminLaporanGangguanController extends Controller
 {
@@ -48,6 +50,16 @@ class AdminLaporanGangguanController extends Controller
                 });
             }
 
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->start_date;
+                $end_date = $request->end_date;
+                $query->whereBetween('laporan_gangguans.waktu_kejadian', [$start_date, $end_date]);
+            }
+
+            if ($request->has('status_id') && !empty($request->status_id)) {
+                $query->where('laporan_gangguans.status_id', $request->status_id);
+            }
+
             $totalRecords = $query->count(); // Hitung total data
 
             $data = $query->paginate($perPage); // Gunakan paginate() untuk membagi data sesuai dengan halaman dan jumlah per halaman
@@ -80,7 +92,52 @@ class AdminLaporanGangguanController extends Controller
             ]);
         }
 
-        return view('admin.laporan-gangguan.index');
+        $status = StatusLaporan::orderBy('id', 'desc')->get();
+
+        return view('admin.laporan-gangguan.index', [
+            'status' => $status
+        ]);
+    }
+
+    public function generateExcel(Request $request)
+    {
+        $query = LaporanGangguan::join('instansis', 'laporan_gangguans.instansi_id', 'instansis.id')
+            ->join('jaringans', 'laporan_gangguans.jaringan_id', 'jaringans.id')
+            ->join('status_laporans', 'laporan_gangguans.status_id', 'status_laporans.id')
+            ->join('users', 'laporan_gangguans.users_id', 'users.id')
+            ->select([
+                'laporan_gangguans.id',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
+                'instansis.nm_instansi',
+                'jaringans.tipe_jaringan',
+                'jaringans.provider',
+                'jaringans.ip_address',
+                'jaringans.bandwidth',
+                'jaringans.status',
+                'jaringans.keterangan',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+                'users.email',
+                'users.telp',
+            ]);
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $query->whereBetween('laporan_gangguans.waktu_kejadian', [$start_date, $end_date]);
+        }
+
+        if ($request->has('status_id') && !empty($request->status_id)) {
+            $query->where('laporan_gangguans.status_id', $request->status_id);
+        }
+
+        $data = $query->orderBy('laporan_gangguans.id', 'desc')->get();
+
+        return Excel::download(new LaporanGangguanExport($data), 'data-laporan-gangguan.xlsx');
     }
 
     public function create()
