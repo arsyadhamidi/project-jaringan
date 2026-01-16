@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Opd\OpdLaporanGangguanController;
 use App\Http\Middleware\CekLevel;
 use Illuminate\Support\Facades\Route;
 
@@ -101,5 +102,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin-level/store', [AdminLevelController::class, 'store'])->name('admin-level.store');
         Route::post('/admin-level/update/{id}', [AdminLevelController::class, 'update'])->name('admin-level.update');
         Route::post('/admin-level/destroy/{id}', [AdminLevelController::class, 'destroy'])->name('admin-level.destroy');
+    });
+
+    // OPD
+    Route::group(['middleware' => [CekLevel::class . ':2']], function () {
+
+        // Laporan Gangguan
+        Route::get('/opd-laporangangguan/index', [OpdLaporanGangguanController::class, 'index'])->name('opd-laporangangguan.index');
+        Route::get('/opd-laporangangguan/create', [OpdLaporanGangguanController::class, 'create'])->name('opd-laporangangguan.create');
+        Route::get('/opd-laporangangguan/edit/{id}', [OpdLaporanGangguanController::class, 'edit'])->name('opd-laporangangguan.edit');
+        Route::post('/opd-laporangangguan/store', [OpdLaporanGangguanController::class, 'store'])->name('opd-laporangangguan.store');
+        Route::post('/opd-laporangangguan/update/{id}', [OpdLaporanGangguanController::class, 'update'])->name('opd-laporangangguan.update');
+        Route::post('/opd-laporangangguan/destroy/{id}', [OpdLaporanGangguanController::class, 'destroy'])->name('opd-laporangangguan.destroy');
     });
 });

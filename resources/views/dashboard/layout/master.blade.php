@@ -192,6 +192,8 @@
                         </li>
                         @if (Auth::user()->level_id == '1')
                             @include('dashboard.sidebar.admin')
+                        @else
+                            @include('dashboard.sidebar.opd')
                         @endif
                     </ul>
                 </nav>
