@@ -40,6 +40,12 @@
         <i class="nav-icon fas fa-tasks"></i>
         <p>
             Tindak Lanjut
+            @php
+                $countLaporans = \App\Models\LaporanGangguan::where('status_id', '1')->count();
+            @endphp
+            @if ($countLaporans > 0)
+                <span class="right badge badge-danger">{{ $countLaporans ?? '0' }}</span>
+            @endif
         </p>
     </a>
 </li>

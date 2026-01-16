@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Jaringan;
 use App\Models\LaporanGangguan;
 use App\Models\StatusLaporan;
+use App\Models\TindakLanjut;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class OpdLaporanGangguanController extends Controller
                     'laporan_gangguans.deskripsi',
                     'laporan_gangguans.waktu_kejadian',
                     'laporan_gangguans.prioritas',
+                    'laporan_gangguans.status_id',
                     'instansis.nm_instansi',
                     'jaringans.tipe_jaringan',
                     'jaringans.provider',
@@ -57,25 +59,45 @@ class OpdLaporanGangguanController extends Controller
 
             $data = $query->paginate($perPage); // Gunakan paginate() untuk membagi data sesuai dengan halaman dan jumlah per halaman
 
-            // Tambahkan kolom aksi
             $dataWithActions = $data->map(function ($item) {
-                $resultid = $item->id ?? '';
-                $editUrl = route('opd-laporangangguan.edit', $item->id ?? '');
 
-                $item->aksi = '
-        <a href="' . $editUrl . '" class="btn btn-outline-primary me-1">
-            <i class="fas fa-edit"></i>
-        </a>
-        <button type="button"
-                class="btn btn-outline-danger btn-delete"
-                data-resultid="' . e($resultid) . '">
-            <i class="fas fa-trash-alt"></i>
-        </button>
-    ';
+                $resultid = $item->id ?? '';
+                $editUrl  = route('opd-laporangangguan.edit', $resultid);
+                $showUrl  = route('opd-laporangangguan.show', $resultid);
+
+                // Default button (wajib!)
+                $editButton   = '';
+                $showButton = '';
+                $deleteButton = '';
+
+                // Cek status
+                if (($item->status_id ?? '1') === '1') {
+
+                    $editButton = '
+            <a href="' . $editUrl . '" class="btn btn-outline-primary">
+                <i class="fas fa-edit"></i>
+            </a>
+        ';
+
+                    $deleteButton = '
+            <button type="button"
+                    class="btn btn-outline-danger btn-delete"
+                    data-resultid="' . e($resultid) . '">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        ';
+                } else {
+                    $showButton = '
+            <a href="' . $showUrl . '" class="btn btn-outline-primary">
+                <i class="fas fa-reply"></i>
+            </a>
+        ';
+                }
+
+                $item->aksi = $editButton . $showButton . $deleteButton;
 
                 return $item;
             });
-
 
             return response()->json([
                 'draw' => $request->input('draw'), // Ambil nomor draw dari permintaan
@@ -86,6 +108,61 @@ class OpdLaporanGangguanController extends Controller
         }
 
         return view('opd.laporan-gangguan.index');
+    }
+
+    public function show($id)
+    {
+        $laporans = LaporanGangguan::join('instansis', 'laporan_gangguans.instansi_id', 'instansis.id')
+            ->join('jaringans', 'laporan_gangguans.jaringan_id', 'jaringans.id')
+            ->join('status_laporans', 'laporan_gangguans.status_id', 'status_laporans.id')
+            ->join('users', 'laporan_gangguans.users_id', 'users.id')
+            ->select([
+                'laporan_gangguans.id',
+                'laporan_gangguans.status_id',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
+                'instansis.nm_instansi',
+                'jaringans.tipe_jaringan',
+                'jaringans.provider',
+                'jaringans.ip_address',
+                'jaringans.bandwidth',
+                'jaringans.status',
+                'jaringans.keterangan',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+            ])->where('laporan_gangguans.id', $id)
+            ->orderBy('laporan_gangguans.id', 'desc')
+            ->first();
+
+        $users = User::orderBy('id', 'desc')->get();
+        $status = StatusLaporan::orderBy('id', 'desc')->get();
+        $tindakans = TindakLanjut::join('laporan_gangguans', 'tindak_lanjuts.laporan_id', 'laporan_gangguans.id')
+            ->join('status_laporans', 'tindak_lanjuts.status_id', 'status_laporans.id')
+            ->join('users', 'tindak_lanjuts.users_id', 'users.id')
+            ->select([
+                'tindak_lanjuts.id',
+                'tindak_lanjuts.laporan_id',
+                'tindak_lanjuts.users_id',
+                'tindak_lanjuts.status_id',
+                'tindak_lanjuts.keterangan',
+                'tindak_lanjuts.created_at',
+                'tindak_lanjuts.updated_at',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+            ])->where('tindak_lanjuts.laporan_id', $id)
+            ->orderBy('tindak_lanjuts.id', 'desc')
+            ->get();
+
+        return view('opd.laporan-gangguan.show', [
+            'laporans' => $laporans,
+            'users' => $users,
+            'status' => $status,
+            'tindakans' => $tindakans,
+        ]);
     }
 
     public function create()
