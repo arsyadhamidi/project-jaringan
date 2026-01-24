@@ -76,34 +76,27 @@
         </div>
     </div>
     <!-- ./col -->
-</div>
 
-<div class="row mt-4">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                Laporan Gangguan
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3 id="totalOnline">0</h3>
+                <p>Jaringan Online</p>
             </div>
-            <div class="card-body table-responsive">
-                <table class="table table-bordered table-striped"
-                       id="myTable"
-                       style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th style="width: 4%">No.</th>
-                            <th>Petugas</th>
-                            <th>Instansi</th>
-                            <th>Jaringan</th>
-                            <th>Judul</th>
-                            <th>Deskripsi</th>
-                            <th>Prioritas</th>
-                            <th>Waktu</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <div class="icon">
+                <i class="fas fa-wifi"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3 id="totalOffline">0</h3>
+                <p>Jaringan Offline</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-wifi-slash"></i>
             </div>
         </div>
     </div>
@@ -153,142 +146,6 @@
 
 @push('custom-script')
     <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
-            });
-
-            $('#selectedStatus').select2({
-                theme: 'bootstrap4'
-            });
-
-            var startDate = moment().startOf('month');
-            var endOfDate = moment().endOf('month');
-
-            $('#searchByDate').daterangepicker({
-                startDate: startDate,
-                endDate: endOfDate,
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    applyLabel: 'Terapkan',
-                    cancelLabel: 'Batal',
-                    customRangeLabel: 'Pilih Rentang Tanggal',
-                    daysOfWeek: [
-                        'Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'
-                    ],
-                    monthNames: [
-                        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                    ],
-                    firstDay: 1
-                },
-                ranges: {
-                    'Hari Ini': [moment(), moment()],
-                    'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-                    '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-                    'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-                    'Bulan Lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                }
-            }, function(start_date, end_date) {
-                myTable.draw();
-            });
-
-            // Tampilkan Data
-            let myTable = $("#myTable").DataTable({
-                processing: true,
-                serverSide: true,
-                paging: true,
-                pageLength: 10,
-                lengthMenu: [
-                    [10, 25, 50, 100, 250],
-                    [10, 25, 50, 100, 250],
-                ],
-                language: {
-                    paginate: {
-                        previous: "Sebelumnya",
-                        next: "Selanjutnya",
-                    },
-                },
-                ajax: {
-                    url: "{{ route('dashboard.index') }}",
-                    data: function(data) {
-                        data.page = Math.ceil(data.start / data.length) + 1;
-                        data.search = $("#myTable_filter input").val();
-                    },
-                },
-                columns: [{
-                        data: null,
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        },
-                        orderable: false,
-                    },
-                    {
-                        data: "name",
-                        name: "name",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "nm_instansi",
-                        name: "nm_instansi",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "tipe_jaringan",
-                        name: "tipe_jaringan",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "judul",
-                        name: "judul",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "deskripsi",
-                        name: "deskripsi",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "prioritas",
-                        name: "prioritas",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "waktu_kejadian",
-                        name: "waktu_kejadian",
-                        defaultContent: "-",
-                    },
-                    {
-                        data: "status",
-                        name: "status",
-                        defaultContent: "-",
-                        render: function(data, row, type){
-                            if(data == 'Online'){
-                                return '<span class="badge bg-success">Online</span>';
-                            }else{
-                                return '<span class="badge bg-danger">Offline</span>';
-                            }
-                        }
-                    },
-                    {
-                        data: "aksi",
-                        name: "aksi",
-                        orderable: false,
-                        searchable: false,
-                        defaultContent: "-",
-                    },
-                ],
-
-                order: [
-                    [1, "desc"]
-                ],
-            });
-        });
-    </script>
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById('laporanChart').getContext('2d');
 
@@ -330,6 +187,28 @@
                     }
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            function loadJaringanStatus() {
+                fetch('/dashboard/jaringan-status')
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('totalOnline').innerText = data.online;
+                        document.getElementById('totalOffline').innerText = data.offline;
+                    })
+                    .catch(() => {
+                        document.getElementById('totalOnline').innerText = '0';
+                        document.getElementById('totalOffline').innerText = '0';
+                    });
+            }
+
+            loadJaringanStatus();
+
+            // refresh tiap 1 menit
+            setInterval(loadJaringanStatus, 60000);
         });
     </script>
 @endpush

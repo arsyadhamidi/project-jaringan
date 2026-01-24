@@ -9,6 +9,7 @@ use App\Models\LaporanGangguan;
 use App\Models\TindakLanjut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -39,68 +40,6 @@ class DashboardController extends Controller
             ->pluck('total', 'bulan')
             ->toArray();
 
-        if ($request->ajax()) {
-            $perPage = $request->input('length', 10);
-            $search = $request->input('search', '');
-
-            $query = LaporanGangguan::join('instansis', 'laporan_gangguans.instansi_id', 'instansis.id')
-                ->join('jaringans', 'laporan_gangguans.jaringan_id', 'jaringans.id')
-                ->join('status_laporans', 'laporan_gangguans.status_id', 'status_laporans.id')
-                ->join('users', 'laporan_gangguans.users_id', 'users.id')
-                ->select([
-                    'laporan_gangguans.id',
-                    'laporan_gangguans.status_id',
-                    'laporan_gangguans.judul',
-                    'laporan_gangguans.deskripsi',
-                    'laporan_gangguans.waktu_kejadian',
-                    'laporan_gangguans.prioritas',
-                    'instansis.nm_instansi',
-                    'jaringans.tipe_jaringan',
-                    'jaringans.provider',
-                    'jaringans.ip_address',
-                    'jaringans.bandwidth',
-                    'jaringans.status',
-                    'jaringans.keterangan',
-                    'status_laporans.nm_status',
-                    'status_laporans.warna',
-                    'users.name',
-                ])
-                ->where('laporan_gangguans.status_id', '1')
-                ->orderBy('laporan_gangguans.id', 'desc');
-
-            if ($search) {
-                $query->where(function ($query) use ($search) {
-                    $query->Where('users.name', 'LIKE', "%{$search}%")
-                        ->orWhere('instansis.nm_instansi', 'LIKE', "%{$search}%");
-                });
-            }
-
-            $totalRecords = $query->count(); // Hitung total data
-
-            $data = $query->paginate($perPage); // Gunakan paginate() untuk membagi data sesuai dengan halaman dan jumlah per halaman
-
-            // Tambahkan kolom aksi
-            $dataWithActions = $data->map(function ($item) {
-                $tindakUrl = route('admin-tindaklanjut.tindaklanjut', $item->id ?? '');
-
-                $item->aksi = '
-        <a href="' . $tindakUrl . '" class="btn btn-outline-primary me-1">
-            <i class="fas fa-reply"></i>
-        </a>
-    ';
-
-                return $item;
-            });
-
-
-            return response()->json([
-                'draw' => $request->input('draw'), // Ambil nomor draw dari permintaan
-                'recordsTotal' => $totalRecords, // Kirim jumlah total data
-                'recordsFiltered' => $totalRecords, // Jumlah data yang difilter sama dengan jumlah total
-                'data' => $dataWithActions, // Kirim data yang sesuai dengan halaman dan jumlah per halaman
-            ]);
-        }
-
         return view('dashboard.main.index', [
             'countInstansis' => $countInstansis,
             'countJaringans' => $countJaringans,
@@ -109,6 +48,36 @@ class DashboardController extends Controller
 
             'laporanPerBulan' => $laporanPerBulan,
             'tindakanPerBulan' => $tindakanPerBulan,
+        ]);
+    }
+
+    public function jaringanStatus()
+    {
+        $ips = Jaringan::pluck('ip_address');
+
+        $online = 0;
+        $offline = 0;
+
+        foreach ($ips as $ip) {
+
+            // cache 30 detik biar server aman
+            $status = Cache::remember("ping_dashboard_$ip", 30, function () use ($ip) {
+                $safeIp = escapeshellarg($ip);
+                exec("ping -n 1 -w 1000 $safeIp", $output, $result);
+
+                return $result === 0 ? 'Online' : 'Offline';
+            });
+
+            if ($status === 'Online') {
+                $online++;
+            } else {
+                $offline++;
+            }
+        }
+
+        return response()->json([
+            'online' => $online,
+            'offline' => $offline
         ]);
     }
 }
