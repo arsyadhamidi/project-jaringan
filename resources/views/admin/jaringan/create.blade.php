@@ -106,7 +106,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                {{--  <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label><b>Status</b></label>
                                         <select name="status"
@@ -126,7 +126,7 @@
                                             </div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div>  --}}
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <label><b>Keterangan</b></label>
@@ -168,8 +168,8 @@
         $('#selectedInstansi').select2({
             theme: 'bootstrap4'
         });
-        $('#selectedStatus').select2({
+        {{--  $('#selectedStatus').select2({
             theme: 'bootstrap4'
-        });
+        });  --}}
     </script>
 @endpush

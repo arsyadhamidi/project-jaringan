@@ -93,7 +93,6 @@ class AdminJaringanController extends Controller
                 'provider'     => 'required|max:100',
                 'ip_address'   => 'required|max:100',
                 'bandwidth'    => 'required|max:100',
-                'status'       => 'required',
                 'keterangan'   => 'required|max:100',
             ],
             [
@@ -111,8 +110,6 @@ class AdminJaringanController extends Controller
                 'bandwidth.required'    => 'Bandwidth wajib diisi.',
                 'bandwidth.max'         => 'Bandwidth maksimal 100 karakter.',
 
-                'status.required'       => 'Status jaringan wajib dipilih.',
-
                 'keterangan.required'   => 'Keterangan wajib diisi.',
                 'keterangan.max'        => 'Keterangan maksimal 100 karakter.',
             ]
@@ -125,7 +122,7 @@ class AdminJaringanController extends Controller
             'provider' => $request->provider,
             'ip_address' => $request->ip_address,
             'bandwidth' => $request->bandwidth,
-            'status' => $request->status,
+            'status' => 'Online',
             'keterangan' => $request->keterangan,
         ]);
 
@@ -151,7 +148,6 @@ class AdminJaringanController extends Controller
                 'provider'     => 'required|max:100',
                 'ip_address'   => 'required|max:100',
                 'bandwidth'    => 'required|max:100',
-                'status'       => 'required',
                 'keterangan'   => 'required|max:100',
             ],
             [
@@ -169,8 +165,6 @@ class AdminJaringanController extends Controller
                 'bandwidth.required'    => 'Bandwidth wajib diisi.',
                 'bandwidth.max'         => 'Bandwidth maksimal 100 karakter.',
 
-                'status.required'       => 'Status jaringan wajib dipilih.',
-
                 'keterangan.required'   => 'Keterangan wajib diisi.',
                 'keterangan.max'        => 'Keterangan maksimal 100 karakter.',
             ]
@@ -183,7 +177,7 @@ class AdminJaringanController extends Controller
             'provider' => $request->provider,
             'ip_address' => $request->ip_address,
             'bandwidth' => $request->bandwidth,
-            'status' => $request->status,
+            'status' => 'Online',
             'keterangan' => $request->keterangan,
         ]);
 
