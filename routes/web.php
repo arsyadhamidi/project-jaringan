@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin-jaringan/index', [AdminJaringanController::class, 'index'])->name('admin-jaringan.index');
         Route::get('/admin-jaringan/create', [AdminJaringanController::class, 'create'])->name('admin-jaringan.create');
         Route::get('/admin-jaringan/edit/{id}', [AdminJaringanController::class, 'edit'])->name('admin-jaringan.edit');
+        Route::get('/admin-jaringan/ping', [AdminJaringanController::class, 'ping']);
         Route::post('/admin-jaringan/store', [AdminJaringanController::class, 'store'])->name('admin-jaringan.store');
         Route::post('/admin-jaringan/update/{id}', [AdminJaringanController::class, 'update'])->name('admin-jaringan.update');
         Route::post('/admin-jaringan/destroy/{id}', [AdminJaringanController::class, 'destroy'])->name('admin-jaringan.destroy');

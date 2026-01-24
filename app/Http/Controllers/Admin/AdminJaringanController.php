@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instansi;
 use App\Models\Jaringan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminJaringanController extends Controller
 {
@@ -143,7 +144,7 @@ class AdminJaringanController extends Controller
 
     public function update(Request $request, $id)
     {
-         $request->validate(
+        $request->validate(
             [
                 'instansi_id'  => 'required',
                 'tipe_jaringan' => 'required|max:100',
@@ -196,6 +197,21 @@ class AdminJaringanController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Selamat ! Anda berhasil menghapus data jaringan',
+        ]);
+    }
+
+    public function ping(Request $request)
+    {
+        $request->validate([
+            'ip' => 'required|ip'
+        ]);
+
+        $ip = escapeshellarg($request->ip);
+
+        exec("ping -n 1 -w 1000 $ip", $output, $status);
+
+        return response()->json([
+            'status' => $status === 0 ? 'Online' : 'Offline'
         ]);
     }
 }

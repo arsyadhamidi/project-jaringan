@@ -19,13 +19,16 @@
             <div class="mb-3">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('admin-jaringan.create') }}" class="btn btn-primary">
+                        <a href="{{ route('admin-jaringan.create') }}"
+                           class="btn btn-primary">
                             <i class="fas fa-plus"></i>
                             Tambah
                         </a>
                     </div>
                     <div class="card-body table-responsive">
-                        <table class="table table-bordered table-striped" id="myTable" style="width: 100%">
+                        <table class="table table-bordered table-striped"
+                               id="myTable"
+                               style="width: 100%">
                             <thead>
                                 <tr>
                                     <th style="width: 4%">No.</th>
@@ -112,15 +115,14 @@
                         defaultContent: "-",
                     },
                     {
-                        data: "status",
-                        name: "status",
-                        defaultContent: "-",
-                        render: function(data, row, type){
-                            if(data == 'Online'){
-                                return '<span class="badge bg-success">Online</span>';
-                            }else{
-                                return '<span class="badge bg-danger">Offline</span>';
-                            }
+                        data: "ip_address",
+                        render: function(ip, type, row) {
+                            return `
+                                <span class="badge bg-secondary status-badge"
+                                    data-ip="${ip}">
+                                    Checking...
+                                </span>
+                            `;
                         }
                     },
                     {
@@ -168,6 +170,44 @@
                         toastr.error("Terjadi kesalahan: " + xhr.responseText);
                     },
                 });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            function checkStatus() {
+                $('.status-badge').each(function(index) {
+                    let badge = $(this);
+                    let ip = badge.data('ip');
+
+                    setTimeout(function() {
+                        $.ajax({
+                            url: '/admin-jaringan/ping',
+                            type: 'GET',
+                            data: {
+                                ip: ip
+                            },
+                            success: function(res) {
+                                badge
+                                    .removeClass('bg-secondary bg-success bg-danger')
+                                    .addClass(res.status === 'Online' ? 'bg-success' : 'bg-danger')
+                                    .text(res.status);
+                            },
+                            error: function() {
+                                badge
+                                    .removeClass('bg-secondary bg-success')
+                                    .addClass('bg-danger')
+                                    .text('Offline');
+                            }
+                        });
+                    }, index * 300); // delay 300ms per IP
+                });
+            }
+
+            // trigger setelah datatable selesai render
+            $('#myTable').on('draw.dt', function() {
+                checkStatus();
             });
 
         });
