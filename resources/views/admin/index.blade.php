@@ -97,6 +97,7 @@
                             <th>Judul</th>
                             <th>Deskripsi</th>
                             <th>Prioritas</th>
+                            <th>Status Jaringan</th>
                             <th>Waktu</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -254,6 +255,11 @@
                     {
                         data: "prioritas",
                         name: "prioritas",
+                        defaultContent: "-",
+                    },
+                    {
+                        data: "status",
+                        name: "status",
                         defaultContent: "-",
                     },
                     {
