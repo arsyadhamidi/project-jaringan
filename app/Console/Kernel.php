@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('jaringan:check')->everyMinute();
+        $schedule->job(new \App\Jobs\PingJaringanJob)
+             ->everyMinute();
     }
 
     /**
