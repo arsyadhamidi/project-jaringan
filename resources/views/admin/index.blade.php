@@ -97,7 +97,6 @@
                             <th>Judul</th>
                             <th>Deskripsi</th>
                             <th>Prioritas</th>
-                            <th>Status Jaringan</th>
                             <th>Waktu</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -258,31 +257,20 @@
                         defaultContent: "-",
                     },
                     {
-                        data: "status",
-                        name: "status",
-                        defaultContent: "-",
-                    },
-                    {
                         data: "waktu_kejadian",
                         name: "waktu_kejadian",
                         defaultContent: "-",
                     },
                     {
-                        data: "warna",
-                        name: "warna",
+                        data: "status",
+                        name: "status",
                         defaultContent: "-",
-                        render: function(data, type, row) {
-                            var namaStatus = row.nm_status;
-                            if (data == '1') {
-                                return '<span class="badge badge-primary">' + namaStatus + '</span>';
-                            } else if (data == '2') {
-                                return '<span class="badge badge-warning">' + namaStatus + '</span>';
-                            } else if (data == '3') {
-                                return '<span class="badge badge-success">' + namaStatus + '</span>';
-                            } else if (data == '0') {
-                                return '<span class="badge badge-danger">' + namaStatus + '</span>';
+                        render: function(data, row, type){
+                            if(data == 'Online'){
+                                return '<span class="badge bg-success">Online</span>';
+                            }else{
+                                return '<span class="badge bg-danger">Offline</span>';
                             }
-                            return data ?? '-';
                         }
                     },
                     {
