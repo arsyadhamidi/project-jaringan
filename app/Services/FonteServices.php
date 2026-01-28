@@ -2,38 +2,38 @@
 
 namespace App\Services;
 
-class FonnteService
+class FonteServices
 {
-    protected string $token;
-    protected string $target;
+    protected $target;
+    protected $token;
 
     public function __construct()
     {
-        $this->token  = "35qCv3v8ahWddXbJpZkA";
-        $this->target = "628136550532";
+        $this->target       = "628136550532";
+        $this->token        = "35qCv3v8ahWddXbJpZkA";
     }
 
-    public function send(string $message)
+    /**
+     * Ambil semua konfigurasi dalam bentuk array
+     */
+    public function all(): array
     {
-        $curl = curl_init();
+        return [
+            'target'        => $this->target,
+            'token'    => $this->token,
+        ];
+    }
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://api.fonnte.com/send',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => [
-                'target'      => $this->target,
-                'message'     => $message,
-                'countryCode' => '62',
-            ],
-            CURLOPT_HTTPHEADER => [
-                'Authorization: ' . $this->token,
-            ],
-        ]);
+    /**
+     * Getter per item kalau mau dipanggil satuan
+     */
+    public function getTarget(): string
+    {
+        return $this->target;
+    }
 
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
+    public function getToken(): string
+    {
+        return $this->token;
     }
 }

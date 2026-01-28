@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Opd;
 
 use App\Http\Controllers\Controller;
+use App\Models\Instansi;
 use App\Models\Jaringan;
 use App\Models\LaporanGangguan;
 use App\Models\StatusLaporan;
 use App\Models\TindakLanjut;
 use App\Models\User;
+use App\Services\FonteServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\FonnteService;
 
 class OpdLaporanGangguanController extends Controller
 {
@@ -188,7 +189,7 @@ class OpdLaporanGangguanController extends Controller
         ]);
     }
 
-    public function store(Request $request, FonnteService $fonnte)
+    public function store(Request $request, FonteServices $fonteServices)
     {
         // VALIDASI
         $request->validate([
@@ -196,10 +197,18 @@ class OpdLaporanGangguanController extends Controller
             'judul'       => 'required|max:100',
             'deskripsi'   => 'required',
             'prioritas'   => 'required',
+        ], [
+            'jaringan_id.required' => 'Data jaringan wajib dipilih.',
+            'judul.required'       => 'Judul laporan wajib diisi.',
+            'judul.max'            => 'Judul laporan maksimal 100 karakter.',
+            'deskripsi.required'   => 'Deskripsi gangguan wajib diisi.',
+            'prioritas.required'   => 'Prioritas laporan wajib dipilih.',
         ]);
 
         // USER LOGIN
         $user = Auth::user();
+        $target       = $fonteServices->getTarget();
+        $token    = $fonteServices->getToken();       // contoh: 743627386
 
         // WAKTU KEJADIAN
         $waktuKejadian = Carbon::parse(
@@ -218,10 +227,31 @@ class OpdLaporanGangguanController extends Controller
             'prioritas'      => $request->prioritas,
         ]);
 
-        // 🔥 KIRIM WA VIA SERVICE
-        $fonnte->send(
-            $request->deskripsi ?: 'Jaringan bermasalah'
-        );
+        // KIRIM WHATSAPP (FONNTE)
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => [
+                'target'      => $target,
+                'message'     => $request->deskripsi ?: 'Jaringan bermasalah',
+                'countryCode' => '62',
+            ],
+            CURLOPT_HTTPHEADER => [
+                'Authorization: ' . $token,
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+
+        if ($response === false) {
+            curl_close($curl);
+            return back()->withErrors('Gagal mengirim notifikasi WhatsApp.');
+        }
+
+        curl_close($curl);
 
         return redirect()
             ->route('opd-laporangangguan.index')
