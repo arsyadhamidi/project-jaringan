@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Laporan Gangguan
         Route::get('/admin-laporangangguan/index', [AdminLaporanGangguanController::class, 'index'])->name('admin-laporangangguan.index');
+        Route::get('/admin-laporangangguan/generatepdf', [AdminLaporanGangguanController::class, 'generatepdf'])->name('admin-laporangangguan.generatepdf');
         Route::get('/admin-laporangangguan/generateExcel', [AdminLaporanGangguanController::class, 'generateExcel'])->name('admin-laporangangguan.generateExcel');
         Route::get('/admin-laporangangguan/create', [AdminLaporanGangguanController::class, 'create'])->name('admin-laporangangguan.create');
         Route::get('/admin-laporangangguan/edit/{id}', [AdminLaporanGangguanController::class, 'edit'])->name('admin-laporangangguan.edit');

@@ -15,6 +15,13 @@
                <i class="fas fa-download"></i>
                Download Excel
             </a>
+            <a href="#"
+               class="btn btn-danger"
+               target="_blank"
+               id="generatepdf">
+               <i class="fas fa-download"></i>
+               Download PDF
+            </a>
         </div>
     </div>
     <div class="row">
@@ -163,6 +170,11 @@
                         data.start_date = startDate;
                         data.end_date = endDate;
                         data.status_id = $('#selectedStatus').val();
+
+                        // Memperbarui URL untuk mengunduh PDF
+                        $('#generatepdf').attr('href', "{{ route('admin-laporangangguan.generatepdf') }}" +
+                            "?start_date=" + startDate + "&end_date=" + endDate +
+                            "&status_id=" + data.status_id);
 
                         // Memperbarui URL untuk mengunduh Excel
                         $('#generateexcel').attr('href', "{{ route('admin-laporangangguan.generateExcel') }}" +

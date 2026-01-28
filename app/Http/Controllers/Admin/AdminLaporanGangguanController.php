@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class AdminLaporanGangguanController extends Controller
 {
@@ -97,6 +98,52 @@ class AdminLaporanGangguanController extends Controller
         return view('admin.laporan-gangguan.index', [
             'status' => $status
         ]);
+    }
+
+    public function generatepdf(Request $request)
+    {
+        $query = LaporanGangguan::join('instansis', 'laporan_gangguans.instansi_id', 'instansis.id')
+            ->join('jaringans', 'laporan_gangguans.jaringan_id', 'jaringans.id')
+            ->join('status_laporans', 'laporan_gangguans.status_id', 'status_laporans.id')
+            ->join('users', 'laporan_gangguans.users_id', 'users.id')
+            ->select([
+                'laporan_gangguans.id',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
+                'instansis.nm_instansi',
+                'jaringans.tipe_jaringan',
+                'jaringans.provider',
+                'jaringans.ip_address',
+                'jaringans.bandwidth',
+                'jaringans.status',
+                'jaringans.keterangan',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+                'users.email',
+                'users.telp',
+            ]);
+
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $query->whereBetween('laporan_gangguans.waktu_kejadian', [$start_date, $end_date]);
+        }
+
+        if ($request->has('status_id') && !empty($request->status_id)) {
+            $query->where('laporan_gangguans.status_id', $request->status_id);
+        }
+
+        // ⚠️ WAJIB get()
+        $laporans = $query->get();
+
+        $pdf = PDF::loadview('admin.laporan-gangguan.export-pdf', [
+            'laporans' => $laporans
+        ])->setPaper('A4', 'Potrait');;
+        // return $pdf->download('laporan-gangguan.pdf');
+        return $pdf->stream('laporan-gangguan.pdf');
     }
 
     public function generateExcel(Request $request)
