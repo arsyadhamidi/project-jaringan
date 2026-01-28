@@ -8,8 +8,9 @@ use App\Models\Jaringan;
 use App\Models\LaporanGangguan;
 use App\Models\TindakLanjut;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -54,6 +55,37 @@ class DashboardController extends Controller
     public function jaringanStatus()
     {
         $ips = Jaringan::pluck('ip_address');
+
+        $online = 0;
+        $offline = 0;
+
+        foreach ($ips as $ip) {
+
+            // cache 30 detik biar server aman
+            $status = Cache::remember("ping_dashboard_$ip", 30, function () use ($ip) {
+                $safeIp = escapeshellarg($ip);
+                exec("ping -n 1 -w 1000 $safeIp", $output, $result);
+
+                return $result === 0 ? 'Online' : 'Offline';
+            });
+
+            if ($status === 'Online') {
+                $online++;
+            } else {
+                $offline++;
+            }
+        }
+
+        return response()->json([
+            'online' => $online,
+            'offline' => $offline
+        ]);
+    }
+
+     public function jaringanStatusOpd()
+    {
+        $users = Auth::user();
+        $ips = Jaringan::where('instansi_id', $users->instansi_id)->pluck('ip_address');
 
         $online = 0;
         $offline = 0;

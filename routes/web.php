@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/jaringan-status', [DashboardController::class, 'jaringanStatus']);
+    Route::get('/dashboard/jaringan-status/opd', [DashboardController::class, 'jaringanStatusOpd']);
 
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan.index');
     Route::post('/pengaturan/updateprofil', [SettingController::class, 'updateprofil'])->name('pengaturan.updateprofil');
