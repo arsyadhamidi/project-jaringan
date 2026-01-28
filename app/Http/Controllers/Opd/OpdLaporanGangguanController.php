@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\FonnteService;
 
 class OpdLaporanGangguanController extends Controller
 {
@@ -187,47 +188,44 @@ class OpdLaporanGangguanController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, FonnteService $fonnte)
     {
-        $request->validate(
-            [
-                'jaringan_id'     => 'required',
-                'judul'           => 'required|max:100',
-                'deskripsi'       => 'required',
-                'prioritas'       => 'required',
-            ],
-            [
-                'jaringan_id.required'    => 'Data jaringan wajib dipilih.',
-
-                'judul.required'          => 'Judul laporan wajib diisi.',
-                'judul.max'               => 'Judul laporan maksimal 100 karakter.',
-
-                'deskripsi.required'      => 'Deskripsi gangguan wajib diisi.',
-
-                'prioritas.required'      => 'Prioritas laporan wajib dipilih.',
-            ]
-        );
-
-        $auth = Auth::user();
-        $users = User::where('id', $auth->id)->first();
-
-        // ---- PROSES SIMPAN DATA ----
-        $jams = Carbon::parse($request->jam)->format('H:i:s');
-        $tanggals = Carbon::parse($request->tanggal)->format('Y-m-d');
-        $dateTimes = $tanggals . ' ' . $jams;
-
-        LaporanGangguan::create([
-            'instansi_id' => $users->instansi_id,
-            'jaringan_id' => $request->jaringan_id,
-            'users_id' => $users->id,
-            'status_id' => '1',
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'waktu_kejadian' => $dateTimes,
-            'prioritas' => $request->prioritas,
+        // VALIDASI
+        $request->validate([
+            'jaringan_id' => 'required',
+            'judul'       => 'required|max:100',
+            'deskripsi'   => 'required',
+            'prioritas'   => 'required',
         ]);
 
-        return redirect()->route('opd-laporangangguan.index')->with('success', 'Selamat ! Anda berhasil menambahkan data laporan gangguan');
+        // USER LOGIN
+        $user = Auth::user();
+
+        // WAKTU KEJADIAN
+        $waktuKejadian = Carbon::parse(
+            $request->tanggal . ' ' . $request->jam
+        )->format('Y-m-d H:i:s');
+
+        // SIMPAN DATA
+        LaporanGangguan::create([
+            'instansi_id'    => $user->instansi_id,
+            'jaringan_id'    => $request->jaringan_id,
+            'users_id'       => $user->id,
+            'status_id'      => 1,
+            'judul'          => $request->judul,
+            'deskripsi'      => $request->deskripsi,
+            'waktu_kejadian' => $waktuKejadian,
+            'prioritas'      => $request->prioritas,
+        ]);
+
+        // 🔥 KIRIM WA VIA SERVICE
+        $fonnte->send(
+            $request->deskripsi ?: 'Jaringan bermasalah'
+        );
+
+        return redirect()
+            ->route('opd-laporangangguan.index')
+            ->with('success', 'Selamat! Anda berhasil menambahkan data laporan gangguan.');
     }
 
     public function edit($id)
@@ -303,5 +301,36 @@ class OpdLaporanGangguanController extends Controller
             'status' => 'success',
             'message' => 'Selamat ! Anda berhasil menghapus data laporan gangguan',
         ]);
+    }
+
+    public function services(Request $request)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => [
+                'target' => '628136550532',
+                'message' => 'test message',
+                'countryCode' => '62',
+            ],
+            CURLOPT_HTTPHEADER => [
+                'Authorization: 35qCv3v8ahWddXbJpZkA',
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+
+        if (curl_errno($curl)) {
+            return response()->json([
+                'error' => curl_error($curl)
+            ], 500);
+        }
+
+        curl_close($curl);
+
+        return $response;
     }
 }

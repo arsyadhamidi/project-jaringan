@@ -121,6 +121,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/opd-laporangangguan/show/{id}', [OpdLaporanGangguanController::class, 'show'])->name('opd-laporangangguan.show');
         Route::get('/opd-laporangangguan/edit/{id}', [OpdLaporanGangguanController::class, 'edit'])->name('opd-laporangangguan.edit');
         Route::post('/opd-laporangangguan/store', [OpdLaporanGangguanController::class, 'store'])->name('opd-laporangangguan.store');
+        Route::post('/opd-laporangangguan/services', [OpdLaporanGangguanController::class, 'services'])->name('opd-laporangangguan.services');
         Route::post('/opd-laporangangguan/update/{id}', [OpdLaporanGangguanController::class, 'update'])->name('opd-laporangangguan.update');
         Route::post('/opd-laporangangguan/destroy/{id}', [OpdLaporanGangguanController::class, 'destroy'])->name('opd-laporangangguan.destroy');
     });
