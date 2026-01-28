@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Jaringan
         Route::get('/admin-jaringan/index', [AdminJaringanController::class, 'index'])->name('admin-jaringan.index');
+        Route::get('/admin-jaringan/generatepdf', [AdminJaringanController::class, 'generatepdf'])->name('admin-jaringan.generatepdf');
         Route::get('/admin-jaringan/create', [AdminJaringanController::class, 'create'])->name('admin-jaringan.create');
         Route::get('/admin-jaringan/edit/{id}', [AdminJaringanController::class, 'edit'])->name('admin-jaringan.edit');
         Route::get('/admin-jaringan/ping', [AdminJaringanController::class, 'ping']);
@@ -94,6 +95,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Instansi
         Route::get('/admin-instansi/index', [AdminInstansiController::class, 'index'])->name('admin-instansi.index');
+        Route::get('/admin-instansi/generatepdf', [AdminInstansiController::class, 'generatepdf'])->name('admin-instansi.generatepdf');
         Route::get('/admin-instansi/create', [AdminInstansiController::class, 'create'])->name('admin-instansi.create');
         Route::get('/admin-instansi/edit/{id}', [AdminInstansiController::class, 'edit'])->name('admin-instansi.edit');
         Route::post('/admin-instansi/store', [AdminInstansiController::class, 'store'])->name('admin-instansi.store');

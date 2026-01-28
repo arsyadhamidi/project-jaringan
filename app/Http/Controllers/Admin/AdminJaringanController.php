@@ -7,6 +7,7 @@ use App\Models\Instansi;
 use App\Models\Jaringan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use PDF;
 
 class AdminJaringanController extends Controller
 {
@@ -207,5 +208,30 @@ class AdminJaringanController extends Controller
         return response()->json([
             'status' => $status === 0 ? 'Online' : 'Offline'
         ]);
+    }
+
+    public function generatepdf()
+    {
+        $query = Jaringan::join('instansis', 'jaringans.instansi_id', 'instansis.id')
+            ->select([
+                'jaringans.id',
+                'jaringans.instansi_id',
+                'jaringans.tipe_jaringan',
+                'jaringans.provider',
+                'jaringans.ip_address',
+                'jaringans.bandwidth',
+                'jaringans.status',
+                'jaringans.keterangan',
+                'instansis.nm_instansi',
+            ]);
+
+        // ⚠️ WAJIB get()
+        $jaringans = $query->get();
+
+        $pdf = PDF::loadview('admin.jaringan.export-pdf', [
+            'jaringans' => $jaringans
+        ])->setPaper('A4', 'Potrait');;
+        // return $pdf->download('laporan-gangguan.pdf');
+        return $pdf->stream('jaringan.pdf');
     }
 }

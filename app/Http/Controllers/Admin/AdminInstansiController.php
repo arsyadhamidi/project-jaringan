@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Instansi;
 use Illuminate\Http\Request;
+use PDF;
 
 class AdminInstansiController extends Controller
 {
@@ -147,5 +148,16 @@ class AdminInstansiController extends Controller
             'status' => 'success',
             'message' => 'Selamat ! Anda berhasil menghapus data instansi',
         ]);
+    }
+
+    public function generatepdf()
+    {
+        $instansis = Instansi::get();
+
+        $pdf = PDF::loadview('admin.instansi.export-pdf', [
+            'instansis' => $instansis
+        ])->setPaper('A4', 'Potrait');;
+        // return $pdf->download('laporan-gangguan.pdf');
+        return $pdf->stream('instansi.pdf');
     }
 }

@@ -7,11 +7,14 @@
         <div class="col-sm-6">
             <h1>Data Jaringan</h1>
         </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Beranda</a></li>
-                <li class="breadcrumb-item active">Data Jaringan</li>
-            </ol>
+        <div class="col-sm-6 text-right">
+            <a href="#"
+               class="btn btn-danger"
+               target="_blank"
+               id="generatepdf">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </a>
         </div>
     </div>
     <div class="row">
@@ -80,6 +83,9 @@
                     data: function(data) {
                         data.page = Math.ceil(data.start / data.length) + 1;
                         data.search = $("#myTable_filter input").val();
+
+                        // Memperbarui URL untuk mengunduh PDF
+                        $('#generatepdf').attr('href', "{{ route('admin-jaringan.generatepdf') }}");
                     },
                 },
                 columns: [{
