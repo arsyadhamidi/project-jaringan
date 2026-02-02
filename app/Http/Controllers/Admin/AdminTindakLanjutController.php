@@ -235,7 +235,34 @@ class AdminTindakLanjutController extends Controller
 
     public function generatepdf($id)
     {
-        $query = TindakLanjut::join('laporan_gangguans', 'tindak_lanjuts.laporan_id', 'laporan_gangguans.id')
+        $laporans = LaporanGangguan::join('instansis', 'laporan_gangguans.instansi_id', 'instansis.id')
+            ->join('jaringans', 'laporan_gangguans.jaringan_id', 'jaringans.id')
+            ->join('status_laporans', 'laporan_gangguans.status_id', 'status_laporans.id')
+            ->join('users', 'laporan_gangguans.users_id', 'users.id')
+            ->select([
+                'laporan_gangguans.id',
+                'laporan_gangguans.status_id',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
+                'instansis.nm_instansi',
+                'jaringans.tipe_jaringan',
+                'jaringans.provider',
+                'jaringans.ip_address',
+                'jaringans.bandwidth',
+                'jaringans.status',
+                'jaringans.keterangan',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'users.name',
+            ])->where('laporan_gangguans.id', $id)
+            ->orderBy('laporan_gangguans.id', 'desc')
+            ->first();
+
+        $users = User::orderBy('id', 'desc')->get();
+        $status = StatusLaporan::orderBy('id', 'desc')->get();
+        $tindakans = TindakLanjut::join('laporan_gangguans', 'tindak_lanjuts.laporan_id', 'laporan_gangguans.id')
             ->join('status_laporans', 'tindak_lanjuts.status_id', 'status_laporans.id')
             ->join('users', 'tindak_lanjuts.users_id', 'users.id')
             ->select([
@@ -243,6 +270,7 @@ class AdminTindakLanjutController extends Controller
                 'tindak_lanjuts.laporan_id',
                 'tindak_lanjuts.users_id',
                 'tindak_lanjuts.status_id',
+                'tindak_lanjuts.tanggal',
                 'tindak_lanjuts.keterangan',
                 'tindak_lanjuts.created_at',
                 'tindak_lanjuts.updated_at',
@@ -254,13 +282,14 @@ class AdminTindakLanjutController extends Controller
                 'laporan_gangguans.prioritas',
                 'users.name',
             ])->where('tindak_lanjuts.laporan_id', $id)
-            ->orderBy('tindak_lanjuts.id', 'desc');
-
-        // ⚠️ WAJIB get()
-        $laporans = $query->first();
+            ->orderBy('tindak_lanjuts.id', 'desc')
+            ->get();
 
         $pdf = PDF::loadview('admin.tindak-lanjut.export-pdf', [
-            'laporans' => $laporans
+            'laporans' => $laporans,
+            'users' => $users,
+            'status' => $status,
+            'tindakans' => $tindakans,
         ])->setPaper('A4', 'Potrait');;
         // return $pdf->download('laporan-gangguan.pdf');
         return $pdf->stream('tindak-lanjut.pdf');
