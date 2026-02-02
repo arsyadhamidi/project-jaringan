@@ -7,11 +7,14 @@
         <div class="col-sm-6">
             <h1>Data Tindak Lanjut</h1>
         </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Beranda</a></li>
-                <li class="breadcrumb-item active">Data Tindak Lanjut</li>
-            </ol>
+        <div class="col-sm-6 text-right">
+            <a href="#"
+               class="btn btn-danger"
+               target="_blank"
+               id="generatepdf">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </a>
         </div>
     </div>
     <div class="row">
@@ -153,6 +156,11 @@
                         data.start_date = startDate;
                         data.end_date = endDate;
                         data.status_id = $('#selectedStatus').val();
+
+                        // Memperbarui URL untuk mengunduh PDF
+                        $('#generatepdf').attr('href', "{{ route('admin-tindaklanjut.generatepdf') }}" +
+                            "?start_date=" + startDate + "&end_date=" + endDate +
+                            "&status_id=" + data.status_id);
                     },
                 },
                 columns: [{
@@ -205,11 +213,11 @@
                             var namaStatus = row.nm_status;
                             if (data == '1') {
                                 return '<span class="badge badge-primary">' + namaStatus + '</span>';
-                            }else if(data == '2'){
+                            } else if (data == '2') {
                                 return '<span class="badge badge-warning">' + namaStatus + '</span>';
-                            }else if(data == '3'){
+                            } else if (data == '3') {
                                 return '<span class="badge badge-success">' + namaStatus + '</span>';
-                            }else if(data == '0'){
+                            } else if (data == '0') {
                                 return '<span class="badge badge-danger">' + namaStatus + '</span>';
                             }
                             return data ?? '-';

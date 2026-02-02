@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Tindak Lanjut
         Route::get('/admin-tindaklanjut/index', [AdminTindakLanjutController::class, 'index'])->name('admin-tindaklanjut.index');
-        Route::get('/admin-tindaklanjut/generatepdf/{id}', [AdminTindakLanjutController::class, 'generatepdf'])->name('admin-tindaklanjut.generatepdf');
+        Route::get('/admin-tindaklanjut/generatepdf', [AdminTindakLanjutController::class, 'generatepdf'])->name('admin-tindaklanjut.generatepdf');
         Route::get('/admin-tindaklanjut/tindaklanjut/{id}', [AdminTindakLanjutController::class, 'tindaklanjut'])->name('admin-tindaklanjut.tindaklanjut');
         Route::post('/admin-tindaklanjut/storetindakan', [AdminTindakLanjutController::class, 'storetindakan'])->name('admin-tindaklanjut.storetindakan');
         Route::post('/admin-tindaklanjut/updatetindakan/{id}', [AdminTindakLanjutController::class, 'updatetindakan'])->name('admin-tindaklanjut.updatetindakan');
