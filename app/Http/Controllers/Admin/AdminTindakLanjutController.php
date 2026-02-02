@@ -135,10 +135,16 @@ class AdminTindakLanjutController extends Controller
                 'tindak_lanjuts.updated_at',
                 'status_laporans.nm_status',
                 'status_laporans.warna',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
                 'users.name',
             ])->where('tindak_lanjuts.laporan_id', $id)
             ->orderBy('tindak_lanjuts.id', 'desc')
             ->get();
+
+
 
         return view('admin.tindak-lanjut.tindak-lanjut', [
             'laporans' => $laporans,

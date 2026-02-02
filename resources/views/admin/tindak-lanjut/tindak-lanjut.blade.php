@@ -48,7 +48,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Provider</td>
+                                    <td>Mac Address</td>
                                     <td>
                                         {{ $laporans->provider ?? '-' }},
                                     </td>
@@ -132,7 +132,8 @@
                                 <tr>
                                     <th style="width: 4%">No.</th>
                                     <th>Petugas</th>
-                                    <th>Tanggal</th>
+                                    <th>Waktu Lapor</th>
+                                    <th>Waktu Selesai</th>
                                     <th>Keterangan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -143,6 +144,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $data->name ?? '-' }}</td>
+                                        <td>{{ $data->waktu_kejadian ?? '-' }}</td>
                                         <td>{{ $data->created_at ?? '-' }}</td>
                                         <td>{{ $data->keterangan ?? '-' }}</td>
                                         <td>
