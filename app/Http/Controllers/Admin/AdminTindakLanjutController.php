@@ -7,9 +7,8 @@ use App\Models\LaporanGangguan;
 use App\Models\StatusLaporan;
 use App\Models\TindakLanjut;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class AdminTindakLanjutController extends Controller
 {
@@ -67,10 +66,14 @@ class AdminTindakLanjutController extends Controller
             // Tambahkan kolom aksi
             $dataWithActions = $data->map(function ($item) {
                 $tindakUrl = route('admin-tindaklanjut.tindaklanjut', $item->id ?? '');
+                $downloadUrl = route('admin-tindaklanjut.generatepdf', $item->id ?? '');
 
                 $item->aksi = '
         <a href="' . $tindakUrl . '" class="btn btn-outline-primary me-1">
             <i class="fas fa-reply"></i>
+        </a>
+         <a href="' . $downloadUrl . '" class="btn btn-outline-danger me-1" target="_blank">
+            <i class="fas fa-download"></i>
         </a>
     ';
 
@@ -221,5 +224,38 @@ class AdminTindakLanjutController extends Controller
         $tindaks->delete();
 
         return back()->with('success', 'Selamat ! Anda berhasil menghapus laporan tindak lanjut');
+    }
+
+    public function generatepdf($id)
+    {
+        $query = TindakLanjut::join('laporan_gangguans', 'tindak_lanjuts.laporan_id', 'laporan_gangguans.id')
+            ->join('status_laporans', 'tindak_lanjuts.status_id', 'status_laporans.id')
+            ->join('users', 'tindak_lanjuts.users_id', 'users.id')
+            ->select([
+                'tindak_lanjuts.id',
+                'tindak_lanjuts.laporan_id',
+                'tindak_lanjuts.users_id',
+                'tindak_lanjuts.status_id',
+                'tindak_lanjuts.keterangan',
+                'tindak_lanjuts.created_at',
+                'tindak_lanjuts.updated_at',
+                'status_laporans.nm_status',
+                'status_laporans.warna',
+                'laporan_gangguans.judul',
+                'laporan_gangguans.deskripsi',
+                'laporan_gangguans.waktu_kejadian',
+                'laporan_gangguans.prioritas',
+                'users.name',
+            ])->where('tindak_lanjuts.laporan_id', $id)
+            ->orderBy('tindak_lanjuts.id', 'desc');
+
+        // ⚠️ WAJIB get()
+        $laporans = $query->first();
+
+        $pdf = PDF::loadview('admin.tindak-lanjut.export-pdf', [
+            'laporans' => $laporans
+        ])->setPaper('A4', 'Potrait');;
+        // return $pdf->download('laporan-gangguan.pdf');
+        return $pdf->stream('tindak-lanjut.pdf');
     }
 }

@@ -97,15 +97,60 @@
             text-align: center;
         }
 
+        .text-center {
+            text-align: center;
+        }
+
+        /* TTD */
+        .ttd {
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .ttd-kanan {
+            width: 40%;
+            float: right;
+            text-align: center;
+        }
+
+        .nama {
+            margin-top: 80px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
         /* Lebar kolom supaya rapi */
-        .col-no { width: 4%; }
-        .col-petugas { width: 12%; }
-        .col-instansi { width: 15%; }
-        .col-jaringan { width: 10%; }
-        .col-judul { width: 14%; }
-        .col-deskripsi { width: 25%; }
-        .col-prioritas { width: 8%; }
-        .col-waktu { width: 12%; }
+        .col-no {
+            width: 4%;
+        }
+
+        .col-petugas {
+            width: 12%;
+        }
+
+        .col-instansi {
+            width: 15%;
+        }
+
+        .col-jaringan {
+            width: 10%;
+        }
+
+        .col-judul {
+            width: 14%;
+        }
+
+        .col-deskripsi {
+            width: 25%;
+        }
+
+        .col-prioritas {
+            width: 8%;
+        }
+
+        .col-waktu {
+            width: 12%;
+        }
     </style>
 </head>
 
@@ -115,7 +160,8 @@
     <table class="kop-surat">
         <tr>
             <td class="logo">
-                <img src="{{ public_path('images/logo-kota.png') }}" alt="Logo">
+                <img src="{{ public_path('images/logo-kota.png') }}"
+                     alt="Logo">
             </td>
             <td class="kop-text">
                 <div class="instansi">PEMERINTAH KOTA PAYAKUMBUH</div>
@@ -160,5 +206,19 @@
         </tbody>
     </table>
 
+    <!-- MENGETAHUI -->
+    <div class="ttd">
+        <div class="ttd-kanan">
+            Payakumbuh, {{ \Carbon\Carbon::now()->format('d-m-Y') }}<br>
+            Mengetahui,<br>
+            Kepala Dinas Komunikasi dan Informatika
+            <div class="nama">
+                KURNIAWAN SYAH PUTRA, S.Sos, M.AP
+            </div>
+            NIP. 19720402 199203 1 003
+        </div>
+    </div>
+
 </body>
+
 </html>

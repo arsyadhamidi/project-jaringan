@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Gangguan</title>
+    <title>Tindak Lanjut</title>
 
     <style>
         body {
@@ -12,7 +12,7 @@
             margin: 20px 30px;
         }
 
-        /* ================= KOP SURAT ================= */
+        /* KOP */
         .kop-surat {
             width: 100%;
             border-collapse: collapse;
@@ -21,7 +21,6 @@
         .logo {
             width: 90px;
             text-align: center;
-            vertical-align: middle;
         }
 
         .logo img {
@@ -30,24 +29,20 @@
 
         .kop-text {
             text-align: center;
-            vertical-align: middle;
         }
 
         .instansi {
             font-size: 18px;
             font-weight: bold;
-            letter-spacing: 1px;
         }
 
         .dinas {
             font-size: 22px;
             font-weight: bold;
-            margin-top: 2px;
         }
 
         .alamat {
             font-size: 11px;
-            margin-top: 4px;
         }
 
         .garis-1 {
@@ -60,41 +55,33 @@
             margin-top: 2px;
         }
 
-        /* ================= JUDUL LAPORAN ================= */
+        /* JUDUL */
         .judul-laporan {
             text-align: center;
             font-size: 14px;
             font-weight: bold;
-            margin: 20px 0 10px;
+            margin: 20px 0;
             text-transform: uppercase;
         }
 
-        /* ================= TABLE DATA ================= */
-        table.table {
+        /* TABEL DETAIL */
+        table.detail {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
 
-        table.table th,
-        table.table td {
-            border: 1px solid #000;
-            padding: 6px 5px;
+        table.detail td {
+            padding: 6px;
             vertical-align: top;
         }
 
-        table.table th {
-            text-align: center;
+        .label {
+            width: 25%;
             font-weight: bold;
-            background-color: #f0f0f0;
         }
 
-        table.table td {
-            text-align: left;
-        }
-
-        .text-center {
-            text-align: center;
+        .separator {
+            width: 2%;
         }
 
         /* TTD */
@@ -114,16 +101,6 @@
             font-weight: bold;
             text-decoration: underline;
         }
-
-        /* Lebar kolom supaya rapi */
-        .col-no { width: 4%; }
-        .col-petugas { width: 12%; }
-        .col-instansi { width: 15%; }
-        .col-jaringan { width: 10%; }
-        .col-judul { width: 14%; }
-        .col-deskripsi { width: 25%; }
-        .col-prioritas { width: 8%; }
-        .col-waktu { width: 12%; }
     </style>
 </head>
 
@@ -133,14 +110,14 @@
     <table class="kop-surat">
         <tr>
             <td class="logo">
-                <img src="{{ public_path('images/logo-kota.png') }}" alt="Logo">
+                <img src="{{ public_path('images/logo-kota.png') }}">
             </td>
             <td class="kop-text">
                 <div class="instansi">PEMERINTAH KOTA PAYAKUMBUH</div>
                 <div class="dinas">DINAS KOMUNIKASI DAN INFORMATIKA</div>
                 <div class="alamat">
-                    Jl. Veteran Komplek Perkantoran Balai Kota (eks. Lapangan Poliko) Kota Payakumbuh<br>
-                    Telp/Fax: (0752) 7972844 &nbsp; Email: diskominfopyk@gmail.com
+                    Jl. Veteran Komplek Perkantoran Balai Kota Kota Payakumbuh<br>
+                    Telp/Fax: (0752) 7972844
                 </div>
             </td>
         </tr>
@@ -151,35 +128,61 @@
 
     <!-- JUDUL -->
     <div class="judul-laporan">
-        Rekap Data  Jaringan
+        LAPORAN TINDAK LANJUT GANGGUAN JARINGAN
     </div>
 
-    <!-- TABLE DATA -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="col-no">No</th>
-                <th class="col-petugas">Instansi</th>
-                <th class="col-instansi">Tipe</th>
-                <th class="col-jaringan">Provider</th>
-                <th class="col-judul">Ip.Address</th>
-                <th class="col-deskripsi">Bandwidth</th>
-                <th class="col-prioritas">Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($jaringans as $data)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $data->nm_instansi ?? '-' }}</td>
-                    <td>{{ $data->tipe_jaringan ?? '-' }}</td>
-                    <td>{{ $data->provider ?? '-' }}</td>
-                    <td>{{ $data->ip_address ?? '-' }}</td>
-                    <td>{{ $data->bandwidth ?? '-' }}</td>
-                    <td>{{ $data->keterangan ?? '-' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
+    <!-- DATA -->
+    <table class="detail">
+        <tr>
+            <td class="label">Nama Petugas</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->name }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Judul Laporan</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->judul }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Deskripsi Gangguan</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->deskripsi }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Prioritas</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->prioritas }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Status</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->nm_status }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Tindak Lanjut</td>
+            <td class="separator">:</td>
+            <td>{{ $laporans->keterangan }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Waktu Kejadian</td>
+            <td class="separator">:</td>
+            <td>
+                {{ \Carbon\Carbon::parse($laporans->waktu_kejadian)->format('d-m-Y H:i') }}
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Waktu Selesai</td>
+            <td class="separator">:</td>
+            <td>
+                {{ \Carbon\Carbon::parse($laporans->created_at)->format('d-m-Y H:i') }}
+            </td>
+        </tr>
     </table>
 
     <!-- MENGETAHUI -->
@@ -194,5 +197,6 @@
             NIP. 19720402 199203 1 003
         </div>
     </div>
+
 </body>
 </html>
