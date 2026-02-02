@@ -133,6 +133,7 @@ class AdminTindakLanjutController extends Controller
                 'tindak_lanjuts.laporan_id',
                 'tindak_lanjuts.users_id',
                 'tindak_lanjuts.status_id',
+                'tindak_lanjuts.tanggal',
                 'tindak_lanjuts.keterangan',
                 'tindak_lanjuts.created_at',
                 'tindak_lanjuts.updated_at',
@@ -163,11 +164,13 @@ class AdminTindakLanjutController extends Controller
             [
                 'users_id'   => 'required',
                 'status_id'  => 'required',
+                'tanggal'  => 'required',
                 'keterangan' => 'required',
             ],
             [
                 'users_id.required'   => 'Pengguna wajib dipilih.',
                 'status_id.required'  => 'Status wajib dipilih.',
+                'tanggal.required'  => 'Tanggal wajib diisi.',
                 'keterangan.required' => 'Keterangan tidak boleh kosong.',
             ]
         );
@@ -180,6 +183,7 @@ class AdminTindakLanjutController extends Controller
             'laporan_id' => $request->laporan_id,
             'users_id' => $request->users_id,
             'status_id' => $request->status_id,
+            'tanggal' => $request->tanggal,
             'keterangan' => $request->keterangan,
         ]);
 
@@ -192,11 +196,13 @@ class AdminTindakLanjutController extends Controller
             [
                 'users_id'   => 'required',
                 'status_id'  => 'required',
+                'tanggal' => 'required',
                 'keterangan' => 'required',
             ],
             [
                 'users_id.required'   => 'Pengguna wajib dipilih.',
                 'status_id.required'  => 'Status wajib dipilih.',
+                'tanggal.required' => 'Tanggal wajib diisi.',
                 'keterangan.required' => 'Keterangan tidak boleh kosong.',
             ]
         );
@@ -210,6 +216,7 @@ class AdminTindakLanjutController extends Controller
         $tindaks->update([
             'users_id' => $request->users_id,
             'status_id' => $request->status_id,
+            'tanggal' => $request->tanggal,
             'keterangan' => $request->keterangan,
         ]);
 

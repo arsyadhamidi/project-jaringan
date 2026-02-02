@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('laporan_id');
             $table->integer('users_id');
             $table->integer('status_id');
+            $table->date('tanggal');
             $table->text('keterangan');
             $table->timestamps();
         });

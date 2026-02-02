@@ -134,6 +134,7 @@
                                     <th>Petugas</th>
                                     <th>Waktu Lapor</th>
                                     <th>Waktu Selesai</th>
+                                    <th>Tanggal</th>
                                     <th>Keterangan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -146,6 +147,7 @@
                                         <td>{{ $data->name ?? '-' }}</td>
                                         <td>{{ $data->waktu_kejadian ?? '-' }}</td>
                                         <td>{{ $data->created_at ?? '-' }}</td>
+                                        <td>{{ $data->tanggal ?? '-' }}</td>
                                         <td>{{ $data->keterangan ?? '-' }}</td>
                                         <td>
                                             @if ($data->warna == '1')
@@ -231,6 +233,21 @@
                                                                                 @endforeach
                                                                             </select>
                                                                             @error('status_id')
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $message }}
+                                                                                </div>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12">
+                                                                        <div class="mb-3">
+                                                                            <label>Tanggal</label>
+                                                                            <input type="date"
+                                                                                   name="tanggal"
+                                                                                   class="form-control"
+                                                                                   value="{{ old('tanggal', $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d')) }}"
+                                                                                   required>
+                                                                            @error('tanggal')
                                                                                 <div class="invalid-feedback">
                                                                                     {{ $message }}
                                                                                 </div>
@@ -331,6 +348,21 @@
                                             @endforeach
                                         </select>
                                         @error('status_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label>Tanggal</label>
+                                        <input type="date"
+                                               name="tanggal"
+                                               class="form-control"
+                                               value="{{ old('tanggal', \Carbon\Carbon::now()->format('Y-m-d')) }}"
+                                               required>
+                                        @error('tanggal')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>

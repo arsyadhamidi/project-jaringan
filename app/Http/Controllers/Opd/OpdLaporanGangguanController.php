@@ -205,10 +205,12 @@ class OpdLaporanGangguanController extends Controller
             'prioritas.required'   => 'Prioritas laporan wajib dipilih.',
         ]);
 
-        // USER LOGIN
-        $user = Auth::user();
-        $target       = $fonteServices->getTarget();
-        $token    = $fonteServices->getToken();       // contoh: 743627386
+        $user  = Auth::user();
+        $instansis = Instansi::where('id', $user->instansi_id)->first();
+        $telp = $instansis->telp ?? '6281372924746';
+        $adminPhone = '628136550532';
+        $token = $fonteServices->getToken();   // TOKEN FONNTE
+        $target = ''. $telp .'|Lily|Client,'. $adminPhone .'|Fonnte|Admin,';
 
         // WAKTU KEJADIAN
         $waktuKejadian = Carbon::parse(
@@ -216,7 +218,7 @@ class OpdLaporanGangguanController extends Controller
         )->format('Y-m-d H:i:s');
 
         // SIMPAN DATA
-        LaporanGangguan::create([
+        $laporan = LaporanGangguan::create([
             'instansi_id'    => $user->instansi_id,
             'jaringan_id'    => $request->jaringan_id,
             'users_id'       => $user->id,
@@ -227,16 +229,28 @@ class OpdLaporanGangguanController extends Controller
             'prioritas'      => $request->prioritas,
         ]);
 
-        // KIRIM WHATSAPP (FONNTE)
+        // PESAN WHATSAPP
+        $message =
+            "📡 *LAPORAN GANGGUAN JARINGAN*\n\n" .
+            "*Judul:* {$laporan->judul}\n" .
+            "*Prioritas:* {$laporan->prioritas}\n" .
+            "*Pelapor:* {$user->name}\n" .
+            "*Waktu:* " . Carbon::parse($waktuKejadian)->format('d-m-Y H:i') . "\n\n" .
+            "*Deskripsi:*\n{$laporan->deskripsi}";
+
+        // KIRIM KE FONNTE
         $curl = curl_init();
 
         curl_setopt_array($curl, [
             CURLOPT_URL => 'https://api.fonnte.com/send',
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => [
                 'target'      => $target,
-                'message'     => $request->deskripsi ?: 'Jaringan bermasalah',
+                'message'     => $message,
+                'delay'       => '2',
                 'countryCode' => '62',
             ],
             CURLOPT_HTTPHEADER => [
@@ -245,18 +259,24 @@ class OpdLaporanGangguanController extends Controller
         ]);
 
         $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        if ($response === false) {
+        if (curl_errno($curl) || $httpCode !== 200) {
+            $error = curl_error($curl);
             curl_close($curl);
-            return back()->withErrors('Gagal mengirim notifikasi WhatsApp.');
+
+            return back()->withErrors(
+                'Gagal mengirim WhatsApp. ' . ($error ?: 'HTTP Code: ' . $httpCode)
+            );
         }
 
         curl_close($curl);
 
         return redirect()
             ->route('opd-laporangangguan.index')
-            ->with('success', 'Selamat! Anda berhasil menambahkan data laporan gangguan.');
+            ->with('success', 'Laporan berhasil disimpan & notifikasi WhatsApp terkirim.');
     }
+
 
     public function edit($id)
     {
