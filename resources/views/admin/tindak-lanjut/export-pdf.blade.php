@@ -147,8 +147,8 @@
                 <th class="col-judul">Judul</th>
                 <th class="col-deskripsi">Deskripsi</th>
                 <th class="col-prioritas">Prioritas</th>
-                <th class="col-waktu">Waktu</th>
-                <th width="15%">Tanggal</th>
+                <th class="col-waktu">Waktu Lapor</th>
+                <th width="15%">Waktu Selesai</th>
                 <th width="20%">Petugas</th>
                 <th width="20%">Status</th>
                 <th>Tindakan</th>
