@@ -207,6 +207,7 @@ class OpdLaporanGangguanController extends Controller
 
         $user  = Auth::user();
         $instansis = Instansi::where('id', $user->instansi_id)->first();
+        $nmInstansi = $instansis->nm_instansi ?? 'Kominfo';
         $telp = $instansis->telp ?? '6281372924746';
         $adminPhone = '628136550532';
         $token = $fonteServices->getToken();   // TOKEN FONNTE
@@ -232,6 +233,7 @@ class OpdLaporanGangguanController extends Controller
         // PESAN WHATSAPP
         $message =
             "📡 *LAPORAN GANGGUAN JARINGAN*\n\n" .
+            "*Instansi:* {$nmInstansi}\n" .
             "*Judul:* {$laporan->judul}\n" .
             "*Prioritas:* {$laporan->prioritas}\n" .
             "*Pelapor:* {$user->name}\n" .

@@ -63,29 +63,11 @@ class AdminTindakLanjutController extends Controller
 
             $data = $query->paginate($perPage); // Gunakan paginate() untuk membagi data sesuai dengan halaman dan jumlah per halaman
 
-            // Tambahkan kolom aksi
-            $dataWithActions = $data->map(function ($item) {
-                $tindakUrl = route('admin-tindaklanjut.tindaklanjut', $item->id ?? '');
-                $downloadUrl = route('admin-tindaklanjut.generatepdf', $item->id ?? '');
-
-                $item->aksi = '
-        <a href="' . $tindakUrl . '" class="btn btn-outline-primary me-1">
-            <i class="fas fa-reply"></i>
-        </a>
-         <a href="' . $downloadUrl . '" class="btn btn-outline-danger me-1" target="_blank">
-            <i class="fas fa-download"></i>
-        </a>
-    ';
-
-                return $item;
-            });
-
-
             return response()->json([
                 'draw' => $request->input('draw'), // Ambil nomor draw dari permintaan
                 'recordsTotal' => $totalRecords, // Kirim jumlah total data
                 'recordsFiltered' => $totalRecords, // Jumlah data yang difilter sama dengan jumlah total
-                'data' => $dataWithActions, // Kirim data yang sesuai dengan halaman dan jumlah per halaman
+                'data' => $data->items(), // Kirim data yang sesuai dengan halaman dan jumlah per halaman
             ]);
         }
 
