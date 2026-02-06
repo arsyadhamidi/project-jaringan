@@ -161,7 +161,7 @@
                 <th class="col-no">No</th>
                 <th class="col-petugas">Instansi</th>
                 <th class="col-instansi">Tipe</th>
-                <th class="col-jaringan">Provider</th>
+                <th class="col-jaringan">Mac Address</th>
                 <th class="col-judul">Ip.Address</th>
                 <th class="col-deskripsi">Bandwidth</th>
                 <th class="col-prioritas">Keterangan</th>
